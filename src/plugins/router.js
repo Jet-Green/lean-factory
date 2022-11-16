@@ -1,14 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// import Landing from '../views/Landing.vue'
+import Camera from '../views/Camera.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
-        // {
-        //     path: '/',
-        //     name: 'Landing',
-        //     component: Landing
-        // },
+        {
+            path: '/',
+            name: 'Camera',
+            component: Camera
+            // () => import('../views/Camera.vue'),
+        },
 
     ],
     scrollBehavior(to, from, savedPosition) {
