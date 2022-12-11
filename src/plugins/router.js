@@ -12,11 +12,11 @@ const router = createRouter({
         },
 
     ],
-    scrollBehavior(to, from, savedPosition) {
-        // if ((to.name == 'RecipePage'))
-        //     return { top: 0 }
-        return savedPosition;
-    }
+    // scrollBehavior(to, from, savedPosition) {
+    // if ((to.name == 'RecipePage'))
+    //     return { top: 0 }
+    //     return savedPosition;
+    // }
 })
 
 export default router
