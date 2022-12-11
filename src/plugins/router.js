@@ -1,22 +1,34 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Camera from '../views/Camera.vue'
+import Instruction from '../views/Instruction.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
-            name: 'Camera',
-            component: Camera
+            name: 'Instruction',
+            component: Instruction
             // () => import('../views/Camera.vue'),
         },
-
+        {
+            path: '/problem',
+            name: 'Problem',
+            component: () => import('../views/Problem.vue'),
+        },
+        {
+            path: '/cabinet',
+            name: 'Cabinet',
+            component: () => import('../views/Cabinet.vue'),
+        },
     ],
-    // scrollBehavior(to, from, savedPosition) {
-    // if ((to.name == 'RecipePage'))
-    //     return { top: 0 }
-    //     return savedPosition;
-    // }
+    scrollBehavior(to, from, savedPosition) {
+        if (to.hash) {
+            return {
+                el: to.hash,
+                behavior: 'smooth',
+            }
+        }
+    }
 })
 
 export default router
