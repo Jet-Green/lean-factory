@@ -7,7 +7,8 @@ export const useAuth = defineStore('auth', {
         isAuth: false,
         user: {
             reports: [],
-            reportsToFix: []
+            reportsToFix: [],
+            roles: ['user', 'admin']
         }
     }),
     getters: {

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Instruction from '../views/Instruction.vue'
+import { useAuth } from "../stores/auth"
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,15 @@ const router = createRouter({
             path: '/admin',
             name: 'Admin',
             component: () => import('../views/Admin.vue'),
+            beforeEnter: (to, from) => {
+                const userStore = useAuth()
+                if (
+                    !userStore.user.roles.includes('admin') &&
+                    to.name == 'Admin'
+                ) {
+                    return { name: 'Instruction' }
+                }
+            }
         },
     ],
     scrollBehavior(to, from, savedPosition) {
@@ -33,7 +43,8 @@ const router = createRouter({
                 behavior: 'smooth',
             }
         }
-    }
+    },
+
 })
 
 export default router

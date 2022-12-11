@@ -1,9 +1,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from './stores/auth'
 
 let drawer = ref(false)
 const router = useRouter()
+const userStore = useAuth()
+const isAdmin = userStore.user.roles.includes('admin')
 
 function move(route) {
     if (route) {
@@ -33,7 +36,8 @@ function move(route) {
                 <v-list-item color="info" prepend-icon="mdi-help-circle-outline" title="Инструкция"
                     value="Instruction"></v-list-item>
                 <v-list-item color="success" prepend-icon="mdi-account" title="Кабинет" value="Cabinet"></v-list-item>
-                <v-list-item color="success" prepend-icon="mdi-pen" title="Админ" value="Admin"></v-list-item>
+                <v-list-item v-if="isAdmin" color="success" prepend-icon="mdi-pen" title="Админ"
+                    value="Admin"></v-list-item>
             </v-list>
         </v-navigation-drawer>
 
@@ -61,7 +65,7 @@ function move(route) {
                     Кабинет
                 </span>
             </v-btn>
-            <v-btn value="Admin">
+            <v-btn v-if="isAdmin" value="Admin">
                 <v-icon color="success">mdi-pen</v-icon>
                 <span>
                     Админ

@@ -11,7 +11,7 @@ import router from './plugins/router'
 loadFonts()
 
 createApp(App)
+    .use(createPinia())
     .use(router)
     .use(vuetify)
-    .use(createPinia())
     .mount('#app')
