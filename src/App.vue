@@ -6,8 +6,10 @@ let drawer = ref(false)
 const router = useRouter()
 
 function move(route) {
-    router.push({ name: route.id ? route.id : route })
-    drawer.value = false
+    if (route) {
+        router.push({ name: route.id ? route.id : route })
+        drawer.value = false
+    }
 }
 
 </script>
@@ -25,7 +27,7 @@ function move(route) {
                 <v-btn icon="mdi-dots-vertical"></v-btn>
             </template> -->
         </v-app-bar>
-        <v-navigation-drawer v-model="drawer">
+        <v-navigation-drawer v-model="drawer" temporary>
             <v-list density="compact" nav @click:select="move">
                 <v-list-item color="red" prepend-icon="mdi-camera" title="Нарушение" value="Problem"></v-list-item>
                 <v-list-item color="info" prepend-icon="mdi-help-circle-outline" title="Инструкция"
@@ -35,7 +37,9 @@ function move(route) {
         </v-navigation-drawer>
 
         <v-main>
-            <router-view />
+            <v-container>
+                <router-view />
+            </v-container>
         </v-main>
         <v-bottom-navigation class="d-flex d-md-none" mode="shift" @update:modelValue="move">
             <v-btn value="Problem">

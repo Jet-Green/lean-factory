@@ -1,5 +1,102 @@
 <script setup>
+import { ref } from 'vue'
+
+let factory = ref([
+  "Участок очистки сточных вод",
+  "Усреднитель",
+  "Холодильник",
+  "Материальный склад № 7",
+  "Токарная мастерская",
+  "Трансформаторная подстанция ТП-15",
+  "Раздевалка АХС",
+  "Гараж легковых автомобилей",
+  "Помещение для тех.обслуживания",
+  "Материальный склад № 8",
+  "Трансформаторная подстанция ТП-47",
+  "Материальный склад",
+  "Диспетчерская",
+  "Материальный склад № 5",
+  "Помещение прачечной",
+  "Тепловой пункт",
+  "Склад готовой продукции",
+  "Железный склад",
+  "Бетонный склад",
+  "Градирни",
+  "Трансформаторная подстанция РП-4",
+  "Здание распредпункта",
+  "Воздуходувная компрессорная",
+  "Склад СП ГПК СОМ",
+  "Компрессорная АХУ",
+  "Электрощитовая к участку ледяной воды",
+  "Участок по производству СП",
+  "Теплогазогенераторная",
+  "Помещение ВВУ",
+  "Отделение баромембранных технологий",
+  "Водоподготовка СИП №3",
+  "Отделение хранения сыворотки",
+  "Отделение хранения молока",
+  "Приемка сыворотки",
+  "Участок нормализации",
+  "Приемка молока",
+  "Здание АБК",
+  "Цех по производству ЦМП и КМП №1,2",
+  "Цех по производству ЦМП и КМП №3",
+  "Цех по производству ЦМП и КМП №4",
+  "Цех по производству ЦМП и КМП №5",
+  "СИП-станция цех  ЦМП №1,2",
+  "Склад вспом.материалов ЦМП № 1",
+  "Склад вспом.материалов ЦМП № 2",
+  "СИП-станция цех ЦМП № 3,4",
+  "СИП-станция цех ЦМП № 5",
+  "Мелкооптовый магазин",
+  "Раздевалка ОСЛ",
+  "Котельная"
+])
+let photo = ref()
+let photos = ref([])
+let place = ref()
+
+function addFile(file) {
+  if (file.length) {
+    file = file[0]
+    console.log(file);
+    photo.value = []
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.addEventListener("load", () => {
+      // convert image file to base64 string
+      photos.value.push({ name: file.name, img: reader.result })
+    }, false);
+  }
+}
+
+function submit() {
+
+}
 </script>
 <template>
-  <h1>Problem</h1>
+  <v-row>
+    <v-col cols="12">
+      <h2> Сообщить о проблеме</h2>
+    </v-col>
+    <v-col cols="12">
+      <v-file-input v-model="photo" label="Фото" variant="solo" prepend-icon="" prepend-inner-icon="mdi-camera"
+        accept="image/*" @update:modelValue="addFile">
+      </v-file-input>
+      <v-card v-for="file of photos" class="mb-2 pa-2">
+        <div style="overflow-y: scroll; max-height: 50px">
+          {{ file.name }}
+        </div>
+        <img :src="file.img" alt="" style="max-width: 100px">
+      </v-card>
+    </v-col>
+    <v-col cols="12">
+      Где это произошло?
+      <v-autocomplete v-model="place" hide-no-data variant="solo" placeholder="Выберите" :items="factory"
+        clearable></v-autocomplete>
+    </v-col>
+    <v-col cols="12" class="d-flex justify-center">
+      <v-btn @click="submit">Отправить</v-btn>
+    </v-col>
+  </v-row>
 </template>
