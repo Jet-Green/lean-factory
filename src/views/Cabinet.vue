@@ -16,7 +16,7 @@ const reports = userStore.user.reports
     </v-col>
 
     <v-col cols=" 12">
-      <h2>Отправил на исправление</h2>
+      <h2>Отправлено на исправление</h2>
       <span v-if="!reports.length">
         Пусто
       </span>

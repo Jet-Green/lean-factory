@@ -20,6 +20,11 @@ const router = createRouter({
             name: 'Cabinet',
             component: () => import('../views/Cabinet.vue'),
         },
+        {
+            path: '/admin',
+            name: 'Admin',
+            component: () => import('../views/Admin.vue'),
+        },
     ],
     scrollBehavior(to, from, savedPosition) {
         if (to.hash) {
