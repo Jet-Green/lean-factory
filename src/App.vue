@@ -1,36 +1,33 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from './stores/auth'
 
-let drawer = ref(false)
 const router = useRouter()
 const userStore = useAuth()
-const isAdmin = userStore.user.roles.includes('admin')
+const isAdmin = 'admin' in userStore.user.roles
 
 function move(route) {
     if (route) {
         router.push({ name: route.id ? route.id : route })
-        drawer.value = false
     }
 }
 
+onMounted(() => {
+    userStore.checkAuth()
+})
 </script>
 
 <template>
     <v-layout>
         <v-app-bar color="primary" class="d-none d-md-flex">
-            <template v-slot:prepend>
-                <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-            </template>
-
             <!-- <v-app-bar-title>Photos</v-app-bar-title> -->
 
             <!-- <template v-slot:append>
                 <v-btn icon="mdi-dots-vertical"></v-btn>
             </template> -->
         </v-app-bar>
-        <v-navigation-drawer v-model="drawer" temporary>
+        <v-navigation-drawer expand-on-hover rail>
             <v-list density="compact" nav @click:select="move">
                 <v-list-item color="red" prepend-icon="mdi-camera" title="Нарушение" value="Problem"></v-list-item>
                 <v-list-item color="info" prepend-icon="mdi-help-circle-outline" title="Инструкция"

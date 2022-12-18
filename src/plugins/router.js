@@ -20,6 +20,17 @@ const router = createRouter({
             path: '/cabinet',
             name: 'Cabinet',
             component: () => import('../views/Cabinet.vue'),
+            beforeEnter: async (to, from) => {
+                const userStore = useAuth()
+                if (!userStore.isAuth)
+                    await userStore.checkAuth()
+                if (
+                    !userStore.isAuth &&
+                    to.name == 'Cabinet'
+                ) {
+                    return { name: 'Login' }
+                }
+            }
         },
         {
             path: '/admin',
@@ -34,6 +45,16 @@ const router = createRouter({
                     return { name: 'Instruction' }
                 }
             }
+        },
+        {
+            path: '/login',
+            name: 'Login',
+            component: () => import('../views/Login.vue'),
+        },
+        {
+            path: '/registration',
+            name: 'Registration',
+            component: () => import('../views/Registration.vue'),
         },
     ],
     scrollBehavior(to, from, savedPosition) {

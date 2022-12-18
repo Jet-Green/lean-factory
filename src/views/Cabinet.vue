@@ -2,8 +2,10 @@
 import { useAuth } from "../stores/auth"
 const userStore = useAuth()
 
-const reportsToFix = userStore.user.reportsToFix
-const reports = userStore.user.reports
+const reportsToFix = []
+// userStore.user.reportsToFix
+const reports = []
+// userStore.user.reports
 
 </script>
 <template>

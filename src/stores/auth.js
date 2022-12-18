@@ -47,7 +47,7 @@ export const useAuth = defineStore('auth', {
             } catch (err) {
                 return {
                     success: false,
-                    message: err.response?.data?.message
+                    error: err
                 }
             }
         },
@@ -64,7 +64,7 @@ export const useAuth = defineStore('auth', {
             } catch (err) {
                 return {
                     success: false,
-                    message: err.response?.data?.message
+                    error: err
                 }
             }
         },
