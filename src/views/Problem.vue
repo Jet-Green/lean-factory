@@ -98,7 +98,8 @@ function submit() {
       <v-file-input v-model="photo" label="Фото" variant="solo" prepend-icon="" prepend-inner-icon="mdi-camera"
         accept="image/*" @update:modelValue="addFile">
       </v-file-input>
-      <v-text-field v-model="commentToPhoto" variant="solo" label="Комментарий к проблеме"></v-text-field>
+      <v-textarea v-model="commentToPhoto" variant="solo" rows="2" counter="500" auto-grow
+        label="Комментарий к проблеме"></v-textarea>
 
       <v-card v-for="file of photos" class="mb-2 pa-2">
         <div style="overflow-y: scroll; max-height: 50px">
