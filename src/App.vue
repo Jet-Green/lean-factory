@@ -1,11 +1,16 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from './stores/auth'
 
 const router = useRouter()
 const userStore = useAuth()
-const isAdmin = 'admin' in userStore.user.roles
+const isAdmin = computed(() => {
+    if (userStore.user.roles) {
+        return userStore.user.roles.includes('admin')
+    }
+    return false
+})
 
 function move(route) {
     if (route) {

@@ -5,11 +5,7 @@ import axios from 'axios'
 export const useAuth = defineStore('auth', {
     state: () => ({
         isAuth: false,
-        user: {
-            reports: [],
-            reportsToFix: [],
-            roles: ['user', 'admin']
-        }
+        user: {}
     }),
     getters: {
         getUserStatus(state) {
@@ -18,7 +14,6 @@ export const useAuth = defineStore('auth', {
         getAuthStatus(state) {
             return state.isAuth
         },
-
     },
     actions: {
         updateUser(user) {

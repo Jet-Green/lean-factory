@@ -36,8 +36,10 @@ const router = createRouter({
             path: '/admin',
             name: 'Admin',
             component: () => import('../views/Admin.vue'),
-            beforeEnter: (to, from) => {
+            beforeEnter: async (to, from) => {
                 const userStore = useAuth()
+                if (!userStore.isAuth)
+                    await userStore.checkAuth()
                 if (
                     !userStore.user.roles.includes('admin') &&
                     to.name == 'Admin'

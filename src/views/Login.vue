@@ -12,7 +12,6 @@ let password = ref('')
 
 async function login() {
   let { success } = await userStore.login(email.value, password.value)
-  console.log(success);
   if (success) {
     router.push('/cabinet')
   }
