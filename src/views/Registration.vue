@@ -12,7 +12,9 @@ let password = ref()
 let fullname = ref()
 
 function registration() {
-  let result = userStore.registration({ fullname: fullname.value, email: email.value, password: password.value, company: router.currentRoute.value.query.company_id })
+  let company_id = router.currentRoute.value.query.company_id
+  let result = userStore.registration({ fullname: fullname.value, email: email.value, password: password.value, company: company_id ? company_id : "-1" })
+
   if (result.success) {
     valid.value = true
     router.push('/cabinet')

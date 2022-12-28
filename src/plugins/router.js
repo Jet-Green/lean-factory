@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Instruction from '../views/Instruction.vue'
 import { useAuth } from "../stores/auth"
+import { useCompany } from '../stores/company'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,6 +69,13 @@ const router = createRouter({
         }
     },
 
+
+})
+
+router.beforeEach(async function () {
+    const companyStore = useCompany()
+    const userStore = useAuth()
+    companyStore.getCompany(userStore.user.company)
 })
 
 export default router

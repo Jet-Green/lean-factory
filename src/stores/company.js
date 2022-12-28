@@ -3,14 +3,18 @@ import CompanyService from '../service/CompanyService'
 
 export const useCompany = defineStore('company', {
     state: () => ({
-        companyName: 'Глазов Молоко',
-        employees: [],
+        company: null
     }),
     getters: {},
     actions: {
         addEmployees(employees) {
             this.employees.push(...employees)
             CompanyService.addEmployees(employees)
+        },
+        async getCompany(identifier) {
+            let { data } = await CompanyService.getCompany(identifier)
+
+            this.company = data
         }
     }
 })
