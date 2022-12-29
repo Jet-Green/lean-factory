@@ -2,9 +2,11 @@
 import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from './stores/auth'
+import { useCompany } from './stores/company';
 
 const router = useRouter()
 const userStore = useAuth()
+const companyStore = useCompany()
 const isAdmin = computed(() => {
     if (userStore.user.roles) {
         return userStore.user.roles.includes('admin')
@@ -18,8 +20,11 @@ function move(route) {
     }
 }
 
-onMounted(() => {
-    userStore.checkAuth()
+onMounted(async () => {
+    await userStore.checkAuth()
+
+    if (userStore.user.company)
+        companyStore.getCompany(userStore.user.company)
 })
 </script>
 

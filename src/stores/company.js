@@ -8,7 +8,7 @@ export const useCompany = defineStore('company', {
     getters: {},
     actions: {
         addEmployees(employees) {
-            this.employees.push(...employees)
+            this.company.employees.push(...employees)
             CompanyService.addEmployees(employees)
         },
         async getCompany(identifier) {

@@ -16,6 +16,16 @@ const router = createRouter({
             path: '/problem',
             name: 'Problem',
             component: () => import('../views/Problem.vue'),
+            beforeEnter: async (to, from) => {
+                const userStore = useAuth()
+                const companyStore = useCompany()
+                await userStore.checkAuth()
+                await companyStore.getCompany(userStore.user.company)
+
+                if (!companyStore.company) {
+                    return { name: 'Instruction' }
+                }
+            }
         },
         {
             path: '/cabinet',
@@ -75,7 +85,8 @@ const router = createRouter({
 router.beforeEach(async function () {
     const companyStore = useCompany()
     const userStore = useAuth()
-    companyStore.getCompany(userStore.user.company)
+    if (userStore.user.company)
+        companyStore.getCompany(userStore.user.company)
 })
 
 export default router

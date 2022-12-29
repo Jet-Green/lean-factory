@@ -23,16 +23,30 @@ function addEmployees() {
 <template>
   <v-row>
     <v-col cols="12">
-      <h1>Моя компания</h1>
+      <h1>Моя компания - <span style="color: #1976D2"> {{ companyStore.company.companyName }} </span></h1>
+
     </v-col>
     <v-col cols="12">
       <h2>Сотрудники</h2>
+      <span class="text-grey">
+        всего: {{ companyStore.company.employees.length }}
+      </span>
     </v-col>
     <v-col cols="12">
       <v-btn size="small" variant="outlined" icon="mdi-plus" color="info" @click="addEmployeeDialog = true"></v-btn>
     </v-col>
     <v-col cols="12">
-      <div v-for="empl of companyStore.employees">{{ empl }}</div>
+      <v-row type="flex">
+        <v-col cols="12" sm="6" v-for="empl of companyStore.company.employees" class="mb-4">
+          <span v-if="empl.isConfirmed" style="color: #4CAF50">{{ empl.user.fullname }}</span>
+          <span v-else>
+            <v-icon color="warning">mdi-alert-outline</v-icon>
+          </span>
+          {{ empl.email }}
+          <v-btn icon="mdi-delete" size="x-small" variant="tonal" color="error" class="mb-1"></v-btn>
+          <v-divider></v-divider>
+        </v-col>
+      </v-row>
     </v-col>
 
     <v-dialog v-model="addEmployeeDialog">
