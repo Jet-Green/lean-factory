@@ -7,6 +7,9 @@ export default {
     deleteEmpl(empl_company) {
         return $api.post('/company/delete-empl', empl_company)
     },
+    updateEmpl(empl_company) {
+        return $api.post('/company/update-empl', empl_company)
+    },
     getCompany(id) {
         return $api.get(`/company/get-company?company_id=${id}`)
     }

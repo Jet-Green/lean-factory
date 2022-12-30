@@ -11,13 +11,22 @@ export const useCompany = defineStore('company', {
             this.company.employees.push(...employees)
             CompanyService.addEmployees(employees)
         },
-        deleteEmpl(empl_company) {
+        deleteEmpl(emplEmail) {
             for (let i = 0; i < this.company.employees.length; i++) {
-                if (this.company.employees[i].email == empl_company.email) {
+                if (this.company.employees[i].email == emplEmail) {
                     this.company.employees.splice(i, 1)
                 }
             }
-            CompanyService.deleteEmpl(empl_company)
+            CompanyService.deleteEmpl({ email: emplEmail, compane: this.company.identifier })
+        },
+        async editEmpl(newEmployee) {
+            for (let i = 0; i < this.company.employees.length; i++) {
+                if (this.company.employees[i]._id == newEmployee._id) {
+                    this.company.employees[i] = newEmployee
+                }
+            }
+            let res = await CompanyService.updateEmpl({ employee: newEmployee, company: this.company.identifier })
+            return res
         },
         async getCompany(identifier) {
             let { data } = await CompanyService.getCompany(identifier)
