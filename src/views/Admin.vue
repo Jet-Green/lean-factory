@@ -58,7 +58,7 @@ async function editEmpl() {
 
     </v-col>
     <v-col cols="12">
-      <h2>Сотрудники</h2>
+      <h2>Обычные сотрудники</h2>
       <span class="text-grey">
         всего: {{ companyStore.company.employees.length }}
       </span>
@@ -106,6 +106,43 @@ async function editEmpl() {
       <p>
         После регистрации у вас появится его <b>полное имя</b>.
       </p>
+    </v-col>
+
+    <v-col cols="12">
+      <h2>Сотрудники, ответственные за территорию</h2>
+      <span class="text-grey">
+        всего: {{ companyStore.company.emplsWithPlace.length }}
+      </span>
+    </v-col>
+
+    <v-col cols="12">
+      <v-row type="flex">
+        <v-col cols="12" md="6" v-for="empl of companyStore.company.emplsWithPlace" class="mb-4">
+          <span v-if="empl.isConfirmed" style="color: #4CAF50">
+            <span>
+              {{ empl.emplName }}
+              <v-tooltip activator="parent" location="top">
+                Пользователь зарегистрировался
+              </v-tooltip>
+            </span>
+          </span>
+          <span v-else>
+            <!-- <v-tooltip activator="parent" location="top">
+              Пользователь получил письмо и скоро зарегистрируется, ждите...
+            </v-tooltip> -->
+            <!-- <v-icon color="warning" style="cursor: pointer">mdi-alert-outline</v-icon> -->
+            {{ empl.emplName }}
+          </span>
+          <v-btn v-if="!empl.email" color="error" variant="text" @click="openEditEmpl(empl)">
+            Добавьте email!
+          </v-btn>
+          <v-btn icon="mdi-pen" size="small" variant="text" color="info" class="mb-1 mr-4" @click="openEditEmpl(empl)">
+          </v-btn>
+          <v-btn icon="mdi-delete" size="small" variant="text" color="error" class="mb-1"
+            @click="openDeleteEmpl(empl)"></v-btn>
+          <v-divider></v-divider>
+        </v-col>
+      </v-row>
     </v-col>
 
     <v-dialog v-model="editEmplDialog">
