@@ -33,11 +33,11 @@ onMounted(async () => {
         <v-app-bar color="primary" class="d-none d-md-flex">
             <!-- <v-app-bar-title>Photos</v-app-bar-title> -->
 
-            <!-- <template v-slot:append>
+            <!-- <template v-slot:prepend>
                 <v-btn icon="mdi-dots-vertical"></v-btn>
             </template> -->
         </v-app-bar>
-        <v-navigation-drawer expand-on-hover rail>
+        <v-navigation-drawer expand-on-hover rail class="d-none d-md-flex">
             <v-list density="compact" nav @click:select="move">
                 <v-list-item color="red" prepend-icon="mdi-camera" title="Нарушение" value="Problem"></v-list-item>
                 <v-list-item color="info" prepend-icon="mdi-help-circle-outline" title="Инструкция"
@@ -73,7 +73,9 @@ onMounted(async () => {
                 </span>
             </v-btn>
             <v-btn v-if="isAdmin" value="Admin">
+                <!-- <v-badge floating dot color="info"> -->
                 <v-icon color="success">mdi-pen</v-icon>
+                <!-- </v-badge> -->
                 <span>
                     Админ
                 </span>

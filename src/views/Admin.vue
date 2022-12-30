@@ -5,6 +5,7 @@ import { useCompany } from '../stores/company'
 const companyStore = useCompany()
 
 let addEmployeeDialog = ref(false)
+let deleteEmplDialog = ref(false)
 let employeesEmails = ref('')
 
 function addEmployees() {
@@ -18,7 +19,19 @@ function addEmployees() {
   companyStore.addEmployees(empls)
 
   addEmployeeDialog.value = false
-} 
+}
+
+let emplToDelete = ref(null)
+function openDeleteEmpl(employee) {
+  deleteEmplDialog.value = true
+  emplToDelete.value = employee
+}
+
+function deleteEmpl() {
+  if (emplToDelete.value) {
+    companyStore.deleteEmpl({ email: emplToDelete.value.email, company: companyStore.company.identifier })
+  }
+}
 </script>
 <template>
   <v-row>
@@ -37,17 +50,59 @@ function addEmployees() {
     </v-col>
     <v-col cols="12">
       <v-row type="flex">
-        <v-col cols="12" sm="6" v-for="empl of companyStore.company.employees" class="mb-4">
-          <span v-if="empl.isConfirmed" style="color: #4CAF50">{{ empl.user.fullname }}</span>
+        <v-col cols="12" md="6" v-for="empl of companyStore.company.employees" class="mb-4">
+          <span v-if="empl.isConfirmed" style="color: #4CAF50">
+            <span>
+              {{ empl.user.fullname }}
+              <v-tooltip activator="parent" location="top">
+                Пользователь зарегистрировался
+              </v-tooltip>
+            </span>
+          </span>
           <span v-else>
-            <v-icon color="warning">mdi-alert-outline</v-icon>
+            <v-tooltip activator="parent" location="top">
+              Пользователь получил письмо и скоро зарегистрируется, ждите...
+            </v-tooltip>
+            <v-icon color="warning" style="cursor: pointer">mdi-alert-outline</v-icon>
           </span>
           {{ empl.email }}
-          <v-btn icon="mdi-delete" size="x-small" variant="tonal" color="error" class="mb-1"></v-btn>
+          <v-btn icon="mdi-delete" size="x-small" variant="text" color="error" class="mb-1"
+            @click="openDeleteEmpl(empl)"></v-btn>
           <v-divider></v-divider>
         </v-col>
       </v-row>
     </v-col>
+    <v-col cols="12" style="font-size: 16px">
+      <p>
+        Добавляйте пользователей по email, строго через <b>запятую</b>.
+      </p>
+      <p>
+        Если вы <b>правильно</b> ввели емейл, то человеку придёт письмо
+        с ссылкой на регистрацию
+      </p>
+      <p>
+        После регистрации у вас появится его <b>полное имя</b>.
+      </p>
+    </v-col>
+
+    <v-dialog v-model="deleteEmplDialog">
+      <v-row type="flex" justify="center">
+        <v-col cols="auto">
+          <v-card class="pa-5 text-center">
+            <h2 v-if="emplToDelete.isConfirmed" class="mb-4">
+              Пользователь уже в вашей компании!
+            </h2>
+            <h2 class="mb-4" v-else>Вы уверены?</h2>
+            <v-btn variant="text" color="success" @click="deleteEmplDialog = false">
+              отмена
+            </v-btn>
+            <v-btn variant="text" color="error" @click="deleteEmpl">
+              Удалить
+            </v-btn>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-dialog>
 
     <v-dialog v-model="addEmployeeDialog">
       <v-row type="flex" justify="center">
