@@ -117,18 +117,37 @@ async function editEmpl() {
     </v-col>
 
     <v-col cols="12">
+      <v-btn size="small" variant="outlined" icon="mdi-plus" color="info" @click="addEmployeeDialog = true"></v-btn>
+    </v-col>
+
+    <v-col cols="12">
       <v-row type="flex">
         <v-col cols="12" md="6" v-for="empl of territoryRespUsers" class="mb-4">
-          <span v-if="empl.isConfirmed" style="color: #4CAF50">
+          <span v-if="empl.isConfirmed">
             <span>
+              {{ empl.place }} -
+            </span>
+            <span style="color: #4CAF50">
               {{ empl.emplName }}
               <v-tooltip activator="parent" location="top">
                 Пользователь зарегистрировался
               </v-tooltip>
             </span>
+            <span>
+              {{ empl.email }}
+            </span>
           </span>
-          <span v-else>
+          <span v-if="!empl.email">
+            {{ empl.place }} -
             {{ empl.emplName }}
+          </span>
+          <span v-else-if="!empl.user">
+            <v-icon color="info" class="mb-1">mdi-clock</v-icon>
+            {{ empl.place }} -
+            {{ empl.emplName }}
+            <v-tooltip activator="parent" location="top">
+              Пользователь получил письмо и скоро зарегистрируется, ждите...
+            </v-tooltip>
           </span>
           <v-btn v-if="!empl.email" color="error" variant="text" @click="openEditEmpl(empl)">
             Добавьте email!
