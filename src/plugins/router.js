@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Instruction from '../views/Instruction.vue'
+import Admin from '../views/Admin.vue'
 import { useAuth } from "../stores/auth"
 import { useCompany } from '../stores/company'
 
@@ -20,7 +21,6 @@ const router = createRouter({
                 const userStore = useAuth()
                 const companyStore = useCompany()
                 await userStore.checkAuth()
-                await companyStore.getCompany(userStore.user.company)
 
                 if (!companyStore.company) {
                     return { name: 'Instruction' }
@@ -46,14 +46,16 @@ const router = createRouter({
         {
             path: '/admin',
             name: 'Admin',
-            component: () => import('../views/Admin.vue'),
+            component: Admin,
             beforeEnter: async (to, from) => {
                 const userStore = useAuth()
-                if (!userStore.isAuth)
+                const companyStore = useCompany()
+                if (!userStore.isAuth && userStore.user.email) {
                     await userStore.checkAuth()
+                }
+
                 if (
-                    !userStore.user.roles.includes('admin') &&
-                    to.name == 'Admin'
+                    !companyStore.employee?.roles.includes('admin')
                 ) {
                     return { name: 'Instruction' }
                 }
@@ -82,11 +84,16 @@ const router = createRouter({
 
 })
 
-router.beforeEach(async function () {
+router.beforeResolve(async function (to, from, next) {
     const companyStore = useCompany()
     const userStore = useAuth()
-    if (userStore.user.company)
-        companyStore.getCompany(userStore.user.company)
+
+    if (userStore.user.company > '-1') {
+        await companyStore.getCompany(userStore.user.company)
+        next()
+    } else {
+        next()
+    }
 })
 
 export default router

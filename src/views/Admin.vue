@@ -1,7 +1,9 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useCompany } from '../stores/company'
 import { useAuth } from '../stores/auth';
+
+let loadingUsers = ref(true)
 
 const companyStore = useCompany()
 const userStore = useAuth()
@@ -10,9 +12,9 @@ let defaultUsers = computed(() => {
   return companyStore.company.employees.filter((e) => e.roles.includes('default_user'))
 })
 
-let admins = computed(() => {
-  return companyStore.company.employees.filter((e) => e.roles.includes('admin'))
-})
+// let admins = computed(() => {
+//   return companyStore.company.employees.filter((e) => e.roles.includes('admin'))
+// })
 
 let territoryRespUsers = computed(() => {
   return companyStore.company.employees.filter((e) => e.roles.includes('territory_resp'))
@@ -62,6 +64,12 @@ async function editEmpl() {
   loadingEdit.value = false
   editEmplDialog.value = false
 }
+
+onMounted(() => {
+  // companyStore.getCompany(userStore.user.email).then(() => {
+  //   loadingUsers.value = false
+  // })
+})
 </script>
 <template>
   <v-row>
@@ -77,7 +85,9 @@ async function editEmpl() {
     <v-col cols="12">
       <v-btn size="small" variant="outlined" icon="mdi-plus" color="info" @click="addEmployeeDialog = true"></v-btn>
     </v-col>
-    <v-col cols="12">
+    <v-col cols="12" v-if="loadingUsers">
+    </v-col>
+    <v-col cols="12" v-else>
       <v-row type="flex">
         <v-col cols="12" md="6" v-for="empl of defaultUsers" class="mb-4">
           <span v-if="empl.email == userStore.user.email" class="text-grey">

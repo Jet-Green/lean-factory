@@ -24,7 +24,7 @@ onMounted(async () => {
     await userStore.checkAuth()
 
     if (userStore.user.company)
-        companyStore.getCompany(userStore.user.company)
+        await companyStore.getCompany(userStore.user.company)
 })
 </script>
 
