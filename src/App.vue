@@ -8,8 +8,8 @@ const router = useRouter()
 const userStore = useAuth()
 const companyStore = useCompany()
 const isAdmin = computed(() => {
-    if (userStore.user.roles) {
-        return userStore.user.roles.includes('admin')
+    if (companyStore.employee) {
+        return companyStore.employee.roles.includes('admin')
     }
     return false
 })

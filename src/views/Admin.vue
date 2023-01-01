@@ -1,10 +1,22 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useCompany } from '../stores/company'
 import { useAuth } from '../stores/auth';
 
 const companyStore = useCompany()
 const userStore = useAuth()
+
+let defaultUsers = computed(() => {
+  return companyStore.company.employees.filter((e) => e.roles.includes('default_user'))
+})
+
+let admins = computed(() => {
+  return companyStore.company.employees.filter((e) => e.roles.includes('admin'))
+})
+
+let territoryRespUsers = computed(() => {
+  return companyStore.company.employees.filter((e) => e.roles.includes('territory_resp'))
+})
 
 let employeesEmails = ref('')
 
@@ -55,12 +67,11 @@ async function editEmpl() {
   <v-row>
     <v-col cols="12">
       <h1>Моя компания - <span style="color: #1976D2"> {{ companyStore.company.companyName }} </span></h1>
-
     </v-col>
     <v-col cols="12">
       <h2>Обычные сотрудники</h2>
       <span class="text-grey">
-        всего: {{ companyStore.company.employees.length }}
+        всего: {{ defaultUsers.length }}
       </span>
     </v-col>
     <v-col cols="12">
@@ -68,7 +79,7 @@ async function editEmpl() {
     </v-col>
     <v-col cols="12">
       <v-row type="flex">
-        <v-col cols="12" md="6" v-for="empl of companyStore.company.employees" class="mb-4">
+        <v-col cols="12" md="6" v-for="empl of defaultUsers" class="mb-4">
           <span v-if="empl.email == userStore.user.email" class="text-grey">
             это вы
           </span>
@@ -95,29 +106,19 @@ async function editEmpl() {
         </v-col>
       </v-row>
     </v-col>
-    <v-col cols="12" style="font-size: 16px">
-      <p>
-        Добавляйте пользователей по email, строго через <b>запятую</b>.
-      </p>
-      <p>
-        Если вы <b>правильно</b> ввели емейл, то человеку придёт письмо
-        с ссылкой на регистрацию.
-      </p>
-      <p>
-        После регистрации у вас появится его <b>полное имя</b>.
-      </p>
-    </v-col>
+
+
 
     <v-col cols="12">
       <h2>Сотрудники, ответственные за территорию</h2>
       <span class="text-grey">
-        всего: {{ companyStore.company.emplsWithPlace.length }}
+        всего: {{ territoryRespUsers.length }}
       </span>
     </v-col>
 
     <v-col cols="12">
       <v-row type="flex">
-        <v-col cols="12" md="6" v-for="empl of companyStore.company.emplsWithPlace" class="mb-4">
+        <v-col cols="12" md="6" v-for="empl of territoryRespUsers" class="mb-4">
           <span v-if="empl.isConfirmed" style="color: #4CAF50">
             <span>
               {{ empl.emplName }}
@@ -127,10 +128,6 @@ async function editEmpl() {
             </span>
           </span>
           <span v-else>
-            <!-- <v-tooltip activator="parent" location="top">
-              Пользователь получил письмо и скоро зарегистрируется, ждите...
-            </v-tooltip> -->
-            <!-- <v-icon color="warning" style="cursor: pointer">mdi-alert-outline</v-icon> -->
             {{ empl.emplName }}
           </span>
           <v-btn v-if="!empl.email" color="error" variant="text" @click="openEditEmpl(empl)">

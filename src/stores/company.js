@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import CompanyService from '../service/CompanyService'
+import { useAuth } from './auth'
 
 export const useCompany = defineStore('company', {
     state: () => ({
-        company: null
+        company: null,
+        employee: null
     }),
     getters: {},
     actions: {
@@ -32,6 +34,13 @@ export const useCompany = defineStore('company', {
             let { data } = await CompanyService.getCompany(identifier)
 
             this.company = data
+
+            let { user } = useAuth()
+            for (let e of this.company.employees) {
+                if (e.email == user.email) {
+                    this.employee = e
+                }
+            }
         }
     }
 })
