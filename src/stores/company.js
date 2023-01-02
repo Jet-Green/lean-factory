@@ -10,6 +10,11 @@ export const useCompany = defineStore('company', {
     getters: {
     },
     actions: {
+        async reportProblem(report) {
+            let res = await CompanyService.reportProblem(report, this.company.identifier)
+
+            console.log(res);
+        },
         async addEmployees(employees) {
             this.company.employees.unshift(...employees)
             let { data } = await CompanyService.addEmployees(employees)

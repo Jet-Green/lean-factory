@@ -1,6 +1,9 @@
 import $api from "../plugins/axios";
 
 export default {
+    reportProblem(report, company_id) {
+        return $api.post(`/company/report-problem?company_id=${company_id}`, report)
+    },
     addEmployees(employees) {
         return $api.post('/company/add-empls?company_id=0', employees)
     },

@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { useCompany } from '../stores/company'
 
 let factory = ref(
   [
@@ -101,6 +102,7 @@ let factory = ref(
     { place: 'Административный корпус', emplName: 'Вершинин А.С.' }
   ]
 )
+const companyStore = useCompany()
 let photo = ref()
 let photos = ref([])
 let commentToPhoto = ref('')
@@ -127,14 +129,13 @@ function submit() {
     place: {}
   }
 
-  // find place n empl object
-  for (let p of factory) {
+  // find place and empl object
+  for (let p of factory.value) {
     if (p.place == place.value) {
       toSend.place = p
     }
   }
-
-
+  companyStore.reportProblem(toSend)
 }
 </script>
 <template>
