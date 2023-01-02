@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, reactive } from 'vue'
 import { useCompany } from '../stores/company'
 import { useAuth } from '../stores/auth';
 
@@ -9,7 +9,7 @@ const companyStore = useCompany()
 const userStore = useAuth()
 
 let defaultUsers = computed(() => {
-  return companyStore.company.employees.filter((e) => e.roles.includes('default_user'))
+  return companyStore.company.employees.filter((e) => e.roles.includes('default_user')).reverse()
 })
 
 // let admins = computed(() => {
@@ -17,21 +17,48 @@ let defaultUsers = computed(() => {
 // })
 
 let territoryRespUsers = computed(() => {
-  return companyStore.company.employees.filter((e) => e.roles.includes('territory_resp'))
+  return companyStore.company.employees.filter((e) => e.roles.includes('territory_resp')).reverse()
 })
 
 let employeesEmails = ref('')
+let newEmpls = ref([
+  {
+    place: '',
+    emplName: '',
+    email: '',
+    isConfirmed: false,
+    roles: ['territory_resp']
+  }
+])
 
+let addEmplTab = ref()
 let addEmployeeDialog = ref(false)
 function addEmployees() {
-  let empls = []
-  let rawEmails = employeesEmails.value.split(',')
-  for (let e of rawEmails) {
-    empls.push({ email: e.trim(), isConfirmed: false })
+  if (newEmpls.value.length == 1 && (!newEmpls.value[0].emplName || !newEmpls.value[0].place)) {
+    delete newEmpls.value[0]
   }
-  employeesEmails.value = ''
 
-  companyStore.addEmployees(empls)
+  let rawEmails = employeesEmails.value.split(',')
+
+  if (rawEmails.length !== 1 && rawEmails[0] !== '') {
+    for (let e of rawEmails) {
+      newEmpls.value.push({
+        email: e.trim(), isConfirmed: false, place: '',
+        emplName: '', roles: ['default_user']
+      })
+    }
+  }
+
+  companyStore.addEmployees(newEmpls.value)
+
+  employeesEmails.value = ''
+  newEmpls.value = [{
+    place: '',
+    emplName: '',
+    email: '',
+    isConfirmed: false,
+    roles: ['territory_resp']
+  }]
 
   addEmployeeDialog.value = false
 }
@@ -45,7 +72,8 @@ function openDeleteEmpl(employee) {
 
 function deleteEmpl() {
   if (emplToDelete.value && emplToDelete.value.email != userStore.user.email) {
-    companyStore.deleteEmpl(emplToDelete.value.email)
+    companyStore.deleteEmpl(emplToDelete.value._id)
+    deleteEmplDialog.value = false
   }
 }
 
@@ -209,13 +237,52 @@ onMounted(() => {
       </v-row>
     </v-dialog>
 
-    <v-dialog v-model="addEmployeeDialog">
+    <v-dialog v-model="addEmployeeDialog" scrollable>
       <v-row type="flex" justify="center">
-        <v-col cols="12" sm="6" xl="4">
+        <v-col cols="12" sm="12" md="8">
           <v-card class="pa-3">
-            <v-textarea v-model="employeesEmails" label="Введите email сотрудников через запятую" variant="solo"
-              auto-grow rows="3"></v-textarea>
-
+            <v-tabs v-model="addEmplTab">
+              <v-tab value="default_user">
+                обычный пользователь
+              </v-tab>
+              <v-tab value="territory_resp">
+                ответственный
+              </v-tab>
+            </v-tabs>
+            <v-window v-model="addEmplTab" style="max-height: 60vh; overflow-y: scroll; ">
+              <v-window-item value="default_user" class="ma-4">
+                <v-textarea v-model="employeesEmails" label="Введите email сотрудников через запятую" variant="solo"
+                  auto-grow rows="3"></v-textarea>
+              </v-window-item>
+              <v-window-item value="territory_resp" class="ma-4">
+                <div v-for="(empl, index) of newEmpls" cols="5">
+                  <v-row type="flex">
+                    <v-col cols="12" class="pb-0 pt-0">
+                      {{ index + 1 }}
+                    </v-col>
+                    <v-col cols="12" xl="4" class="pb-0 pt-0">
+                      <v-text-field placeholder="ФИО" variant="solo" density="compact"
+                        v-model="newEmpls[index].emplName">
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" xl="4" class="pb-0 pt-0">
+                      <v-text-field placeholder="Ответственный за" variant="solo" density="compact"
+                        v-model="newEmpls[index].place">
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" xl="4" class="pt-0 pb-0">
+                      <v-text-field placeholder="Email" variant="solo" density="compact"
+                        v-model="newEmpls[index].email">
+                      </v-text-field>
+                    </v-col>
+                  </v-row>
+                </div>
+                <v-btn size="small"
+                  @click="newEmpls.push({ place: '', emplName: '', email: '', roles: ['territory_resp'], isConfirmed: false })">
+                  + ещё
+                </v-btn>
+              </v-window-item>
+            </v-window>
             <v-card-actions>
               <v-btn color="success" @click="addEmployees">добавить</v-btn>
               <v-btn color="error" @click="addEmployeeDialog = false">отмена</v-btn>
