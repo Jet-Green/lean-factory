@@ -28,6 +28,11 @@ const router = createRouter({
             }
         },
         {
+            path: '/problem-page',
+            name: 'ProblemPage',
+            component: () => import('../views/ProblemPage.vue'),
+        },
+        {
             path: '/cabinet',
             name: 'Cabinet',
             component: () => import('../views/Cabinet.vue'),

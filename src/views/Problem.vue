@@ -126,7 +126,8 @@ function submit() {
   let toSend = {
     photos: [],
     commentToPhoto: commentToPhoto.value,
-    place: {}
+    place: {},
+    dateStart: Date.now()
   }
 
   // find place and empl object
