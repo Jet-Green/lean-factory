@@ -10,7 +10,7 @@ const router = useRouter()
 
 let reportsToFix = computed(() => {
   if (companyStore.employee) {
-    return companyStore.employee.reportsToFix
+    return companyStore.employee.reportsToFix.reverse()
   }
   return []
 })
@@ -45,12 +45,18 @@ function logout() {
       <v-row type="flex">
         <v-col v-for="report of reportsToFix" cols="6">
           <v-hover v-slot="{ isHovering, props }">
-            <v-card style="cursor: pointer; max-height: 50px" v-bind="props" :elevation="isHovering ? 4 : 0"
-              class="pa-2" @click="router.push(`/problem-page?_id=${report._id}`)">
+            <v-card style="cursor: pointer;" v-bind="props" :elevation="isHovering ? 4 : 0" class="pa-2"
+              @click="router.push(`/problem-page?_id=${report._id}`)">
               <div>{{ report.place.place }}</div>
-              <span class="text-grey-darken-2">
+              <div class="text-grey-darken-2">
                 {{ report.commentToPhoto }}
-              </span>
+              </div>
+              <b v-if="((Date.now() - report.dateStart) / 1000 / 60 / 60).toFixed(0) < 24" class="text-success">
+                прошло: {{((Date.now() - report.dateStart) / 1000 / 60 / 60).toFixed(0)}} ч.
+              </b>
+              <div v-else class="text-error">
+                Просроченная задача
+              </div>
             </v-card>
           </v-hover>
         </v-col>

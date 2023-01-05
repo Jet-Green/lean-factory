@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, computed } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from "vue-router"
 import { useCompany } from '../stores/company'
 
@@ -7,6 +7,9 @@ const route = useRoute()
 const companyStore = useCompany()
 
 const _id = route.query._id
+
+const problemTypes = [
+]
 
 let currentProblem = computed(() => {
   let res = companyStore.employee?.reportsToFix.find((x) => x._id == _id)
@@ -32,6 +35,11 @@ let currentProblem = computed(() => {
             Комментарий к фото:
             <br /> {{ currentProblem.commentToPhoto }}
           </div>
+        </v-col>
+        <v-col cols=12>
+          Выюрать тип проблемы
+          <v-autocomplete v-model="problemType" hide-no-data variant="solo" placeholder="Выберите" :items="problemTypes"
+            item-title="place" item-value="place" clearable></v-autocomplete>
         </v-col>
         <!-- кнопки -->
       </v-row>
