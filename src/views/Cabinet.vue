@@ -52,7 +52,7 @@ function logout() {
                 {{ report.commentToPhoto }}
               </div>
               <b v-if="((Date.now() - report.dateStart) / 1000 / 60 / 60).toFixed(0) < 24" class="text-success">
-                прошло: {{((Date.now() - report.dateStart) / 1000 / 60 / 60).toFixed(0)}} ч.
+                осталось: {{(24 - (Date.now() - report.dateStart) / 1000 / 60 / 60).toFixed(0)}} ч.
               </b>
               <div v-else class="text-error">
                 Просроченная задача

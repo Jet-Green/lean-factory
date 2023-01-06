@@ -122,7 +122,7 @@ function addFile(file) {
   }
 }
 
-function submit() {
+async function submit() {
   let toSend = {
     photos: [],
     commentToPhoto: commentToPhoto.value,
@@ -136,7 +136,9 @@ function submit() {
       toSend.place = p
     }
   }
-  companyStore.reportProblem(toSend)
+  await companyStore.reportProblem(toSend)
+  commentToPhoto.value = ''
+  place.value = null
 }
 </script>
 <template>

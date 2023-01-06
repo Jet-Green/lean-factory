@@ -22,7 +22,7 @@ let currentProblem = computed(() => {
     <v-col cols="12" md="8">
       <v-row>
         <v-col cols="12" md="6">
-          <v-img v-for="img of currentProblem.photos" :src="img" height="400"></v-img>
+          <v-img v-for="img of currentProblem.photos" :src="img"></v-img>
         </v-col>
         <v-col cols="12" md="6" style="font-size: 16px; ">
           <div>
@@ -37,7 +37,7 @@ let currentProblem = computed(() => {
           </div>
         </v-col>
         <v-col cols=12>
-          Выюрать тип проблемы
+          Выбрать тип проблемы
           <v-autocomplete v-model="problemType" hide-no-data variant="solo" placeholder="Выберите" :items="problemTypes"
             item-title="place" item-value="place" clearable></v-autocomplete>
         </v-col>
