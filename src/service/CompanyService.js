@@ -1,6 +1,9 @@
 import $api from "../plugins/axios";
 
 export default {
+    getFullEmpl(_id) {
+        return $api.get(`/company/get-full-empl?_id=${_id}`);
+    },
     reportProblem(report, company_id) {
         return $api.post(`/company/report-problem?company_id=${company_id}`, report)
     },

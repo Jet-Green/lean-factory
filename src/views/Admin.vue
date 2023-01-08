@@ -8,16 +8,8 @@ let loadingUsers = ref(true)
 const companyStore = useCompany()
 const userStore = useAuth()
 
-let defaultUsers = computed(() => {
-  return companyStore.company.employees.filter((e) => e.roles.includes('default_user')).reverse()
-})
-
-// let admins = computed(() => {
-//   return companyStore.company.employees.filter((e) => e.roles.includes('admin'))
-// })
-
-let territoryRespUsers = computed(() => {
-  return companyStore.company.employees.filter((e) => e.roles.includes('territory_resp')).reverse()
+let employees = computed(() => {
+  return companyStore.company.employees
 })
 
 let employeesEmails = ref('')
@@ -65,9 +57,10 @@ function addEmployees() {
 
 let deleteEmplDialog = ref(false)
 let emplToDelete = ref(null)
-function openDeleteEmpl(employee) {
+function openDeleteEmpl(employee, event) {
   deleteEmplDialog.value = true
   emplToDelete.value = employee
+  event.stopPropagation();
 }
 
 function deleteEmpl() {
@@ -80,9 +73,10 @@ function deleteEmpl() {
 let editEmplDialog = ref(false)
 let emplToEdit = ref(null)
 let loadingEdit = ref(false)
-function openEditEmpl(empl) {
+function openEditEmpl(empl, event) {
   editEmplDialog.value = true
   emplToEdit.value = empl
+  event.stopPropagation();
 }
 async function editEmpl() {
   loadingEdit.value = true
@@ -91,6 +85,17 @@ async function editEmpl() {
   }
   loadingEdit.value = false
   editEmplDialog.value = false
+}
+
+let showEmplDialog = ref(false)
+let emplToShow = ref(null)
+let fullEmplInfo = ref({})
+async function openEmplInfo(empl) {
+  console.log(empl);
+  emplToShow.value = empl
+  showEmplDialog.value = true
+  let { data } = await companyStore.getFullEmpl(emplToShow.value._id)
+  fullEmplInfo.value = data
 }
 
 onMounted(() => {
@@ -104,7 +109,7 @@ onMounted(() => {
     <v-col cols="12">
       <h1>Моя компания - <span style="color: #1976D2"> {{ companyStore.company.companyName }} </span></h1>
     </v-col>
-    <v-col cols="12">
+    <!-- <v-col cols="12">
       <h2>Обычные сотрудники</h2>
       <span class="text-grey">
         всего: {{ defaultUsers.length }}
@@ -143,14 +148,14 @@ onMounted(() => {
           <v-divider></v-divider>
         </v-col>
       </v-row>
-    </v-col>
+    </v-col> -->
 
 
 
     <v-col cols="12">
-      <h2>Сотрудники, ответственные за территорию</h2>
+      <h2>Сотрудники</h2>
       <span class="text-grey">
-        всего: {{ territoryRespUsers.length }}
+        всего: {{ employees.length }}
       </span>
     </v-col>
 
@@ -160,11 +165,9 @@ onMounted(() => {
 
     <v-col cols="12">
       <v-row type="flex">
-        <v-col cols="12" md="6" v-for="empl of territoryRespUsers" class="mb-4">
+        <v-col cols="12" md="6" v-for="empl of employees" class="mb-4" @click.stop="openEmplInfo(empl)"
+          style="cursor: pointer">
           <span v-if="empl.isConfirmed">
-            <span>
-              {{ empl.place }} -
-            </span>
             <span style="color: #4CAF50">
               {{ empl.emplName }}
               <v-tooltip activator="parent" location="top">
@@ -176,28 +179,64 @@ onMounted(() => {
             </span>
           </span>
           <span v-if="!empl.email">
-            {{ empl.place }} -
             {{ empl.emplName }}
           </span>
           <span v-else-if="!empl.user">
             <v-icon color="info" class="mb-1">mdi-clock</v-icon>
-            {{ empl.place }} -
             {{ empl.emplName }}
             <v-tooltip activator="parent" location="top">
               Пользователь получил письмо и скоро зарегистрируется, ждите...
             </v-tooltip>
           </span>
-          <v-btn v-if="!empl.email" color="error" variant="text" @click="openEditEmpl(empl)">
+          <v-btn v-if="!empl.email" color="error" variant="text" @click="openEditEmpl(empl, $event)">
             Добавьте email!
           </v-btn>
-          <v-btn icon="mdi-pen" size="small" variant="text" color="info" class="mb-1 mr-4" @click="openEditEmpl(empl)">
+          <v-btn icon="mdi-pen" size="small" variant="text" color="info" class="mb-1 mr-4"
+            @click="openEditEmpl(empl, $event)">
           </v-btn>
           <v-btn icon="mdi-delete" size="small" variant="text" color="error" class="mb-1"
-            @click="openDeleteEmpl(empl)"></v-btn>
+            @click="openDeleteEmpl(empl, $event)"></v-btn>
           <v-divider></v-divider>
         </v-col>
       </v-row>
     </v-col>
+
+    <v-dialog v-model="showEmplDialog" scrollable>
+      <v-row type="flex" justify="center">
+        <v-col cols="12" sm="12" md="6">
+          <v-card class="pa-3" v-if="fullEmplInfo._id">
+            <h2 class="text-center">
+              {{ fullEmplInfo.emplName }}
+            </h2>
+            <div v-if="fullEmplInfo.place.length > 0">
+              <span style="font-size: 20px;">
+                Ответственный за:
+              </span>
+              <span v-for="place of fullEmplInfo.place">
+                <b>
+                  {{ place.place }}
+                </b>
+                <br />
+              </span>
+            </div>
+            <div v-if="fullEmplInfo.problemType.length > 0">
+              <span style="font-size: 20px;">
+                Типы проблем:
+              </span>
+              <span v-for="problemType of fullEmplInfo.problemType">
+                <b>
+                  {{ problemType.type }}
+                </b>
+                <br />
+              </span>
+            </div>
+            <v-card-actions>
+              <v-btn @click="showEmplDialog = false">ок</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-dialog>
 
     <v-dialog v-model="editEmplDialog">
       <v-row type="flex" justify="center">
