@@ -1,6 +1,9 @@
 import $api from "../plugins/axios";
 
 export default {
+    sendProblemToFix(data) {
+        return $api.post("/company/send-to-fix", data);
+    },
     getFullEmpl(_id) {
         return $api.get(`/company/get-full-empl?_id=${_id}`);
     },

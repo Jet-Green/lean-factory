@@ -127,7 +127,8 @@ async function submit() {
     photos: [],
     commentToPhoto: commentToPhoto.value,
     place: {},
-    dateStart: Date.now()
+    dateStart: Date.now(),
+    status: "sent_to_fix"
   }
 
   // find place and empl object

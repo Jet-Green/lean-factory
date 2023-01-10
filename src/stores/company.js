@@ -10,6 +10,9 @@ export const useCompany = defineStore('company', {
     getters: {
     },
     actions: {
+        async sendProblemToFix(data) {
+            return await CompanyService.sendProblemToFix(data)
+        },
         async getFullEmpl(_id) {
             return await CompanyService.getFullEmpl(_id)
         },
