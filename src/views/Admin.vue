@@ -15,7 +15,7 @@ let employees = computed(() => {
 let employeesEmails = ref('')
 let newEmpls = ref([
   {
-    place: '',
+    places: '',
     emplName: '',
     email: '',
     isConfirmed: false,
@@ -26,7 +26,7 @@ let newEmpls = ref([
 let addEmplTab = ref()
 let addEmployeeDialog = ref(false)
 function addEmployees() {
-  if (newEmpls.value.length == 1 && (!newEmpls.value[0].emplName || !newEmpls.value[0].place)) {
+  if (newEmpls.value.length == 1 && (!newEmpls.value[0].emplName || !newEmpls.value[0].places)) {
     delete newEmpls.value[0]
   }
 
@@ -35,7 +35,7 @@ function addEmployees() {
   if (rawEmails.length !== 1 && rawEmails[0] !== '') {
     for (let e of rawEmails) {
       newEmpls.value.push({
-        email: e.trim(), isConfirmed: false, place: '',
+        email: e.trim(), isConfirmed: false, places: '',
         emplName: '', roles: ['default_user']
       })
     }
@@ -45,7 +45,7 @@ function addEmployees() {
 
   employeesEmails.value = ''
   newEmpls.value = [{
-    place: '',
+    places: '',
     emplName: '',
     email: '',
     isConfirmed: false,
@@ -91,10 +91,10 @@ let showEmplDialog = ref(false)
 let emplToShow = ref(null)
 let fullEmplInfo = ref({})
 async function openEmplInfo(empl) {
-  console.log(empl);
   emplToShow.value = empl
   showEmplDialog.value = true
   let { data } = await companyStore.getFullEmpl(emplToShow.value._id)
+  console.log(data);
   fullEmplInfo.value = data
 }
 
@@ -208,11 +208,11 @@ onMounted(() => {
             <h2 class="text-center">
               {{ fullEmplInfo.emplName }}
             </h2>
-            <div v-if="fullEmplInfo.place.length > 0">
+            <div v-if="fullEmplInfo.places.length > 0">
               <span style="font-size: 20px;">
                 Ответственный за:
               </span>
-              <span v-for="place of fullEmplInfo.place">
+              <span v-for="place of fullEmplInfo.places">
                 <b>
                   {{ place.place }}
                 </b>
@@ -317,7 +317,7 @@ onMounted(() => {
                   </v-row>
                 </div>
                 <v-btn size="small"
-                  @click="newEmpls.push({ place: '', emplName: '', email: '', roles: ['territory_resp'], isConfirmed: false })">
+                  @click="newEmpls.push({ places: '', emplName: '', email: '', roles: ['territory_resp'], isConfirmed: false })">
                   + ещё
                 </v-btn>
               </v-window-item>
