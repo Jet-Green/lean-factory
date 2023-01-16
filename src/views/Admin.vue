@@ -9,7 +9,7 @@ const companyStore = useCompany()
 const userStore = useAuth()
 
 let employees = computed(() => {
-  return companyStore.company.employees
+  return companyStore.fetchedEmployees
 })
 
 let employeesEmails = ref('')
