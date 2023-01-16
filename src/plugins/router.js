@@ -55,9 +55,11 @@ const router = createRouter({
             beforeEnter: async (to, from) => {
                 const userStore = useAuth()
                 const companyStore = useCompany()
-                if (!userStore.isAuth && userStore.user.email) {
+                if (userStore.isAuth && userStore.user.email) {
                     await userStore.checkAuth()
                 }
+
+                await companyStore.fecthEmpls()
 
                 if (
                     !companyStore.employee?.roles.includes('admin')

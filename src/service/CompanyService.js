@@ -4,6 +4,9 @@ export default {
     sendProblemToFix(data) {
         return $api.post("/company/send-to-fix", data);
     },
+    getEmployees(company_id) {
+        return $api.get(`/company/get-employees?company_id=${company_id}`);
+    },
     getFullEmpl(_id) {
         return $api.get(`/company/get-full-empl?_id=${_id}`);
     },

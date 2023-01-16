@@ -5,7 +5,8 @@ import { useAuth } from './auth'
 export const useCompany = defineStore('company', {
     state: () => ({
         company: null,
-        employee: null
+        employee: null,
+        fetchedEmployees: null
     }),
     getters: {
     },
@@ -48,13 +49,23 @@ export const useCompany = defineStore('company', {
             let { data } = await CompanyService.getCompany(identifier)
 
             this.company = data
+            await this.fecthEmpls()
+        },
+        async fecthEmpls() {
+            if (!this.company) return
 
-            let { user } = useAuth()
-            for (let e of this.company.employees) {
-                if (e.email == user.email) {
-                    this.employee = e
+            let { data } = await CompanyService.getEmployees(this.company.identifier)
+
+            this.fetchedEmployees = data
+
+            const userStore = useAuth()
+            for (let empl of data) {
+                if (empl.email == userStore.user.email) {
+                    this.employee = empl
+                    break
                 }
             }
+
         }
     }
 })
