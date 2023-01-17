@@ -12,39 +12,39 @@ let employees = computed(() => {
   return companyStore.fetchedEmployees
 })
 
-let employeesEmails = ref('')
-let newEmpls = ref([
+// let employeesEmails = ref('')
+let NEW_EMPLS = ref([
   {
     places: '',
     emplName: '',
     email: '',
     isConfirmed: false,
-    roles: ['territory_resp']
+    roles: []
   }
 ])
 
 let addEmplTab = ref()
 let addEmployeeDialog = ref(false)
 function addEmployees() {
-  if (newEmpls.value.length == 1 && (!newEmpls.value[0].emplName || !newEmpls.value[0].places)) {
-    delete newEmpls.value[0]
+  if (NEW_EMPLS.value.length == 1 && (!NEW_EMPLS.value[0].emplName || !NEW_EMPLS.value[0].places)) {
+    delete NEW_EMPLS.value[0]
   }
 
-  let rawEmails = employeesEmails.value.split(',')
+  // let rawEmails = employeesEmails.value.split(',')
 
-  if (rawEmails.length !== 1 && rawEmails[0] !== '') {
-    for (let e of rawEmails) {
-      newEmpls.value.push({
-        email: e.trim(), isConfirmed: false, places: '',
-        emplName: '', roles: ['default_user']
-      })
-    }
-  }
+  // if (rawEmails.length !== 1 && rawEmails[0] !== '') {
+  //   for (let e of rawEmails) {
+  //     NEW_EMPLS.value.push({
+  //       email: e.trim(), isConfirmed: false, places: '',
+  //       emplName: '', roles: ['default_user']
+  //     })
+  //   }
+  // }
+  // employeesEmails.value = ''
 
-  companyStore.addEmployees(newEmpls.value)
+  companyStore.addEmployees(NEW_EMPLS.value)
 
-  employeesEmails.value = ''
-  newEmpls.value = [{
+  NEW_EMPLS.value = [{
     places: '',
     emplName: '',
     email: '',
@@ -276,48 +276,75 @@ onMounted(() => {
       </v-row>
     </v-dialog>
 
-    <v-dialog v-model="addEmployeeDialog" scrollable>
+    <!-- <v-dialog v-model="addEmployeeDialog" scrollable>
       <v-row type="flex" justify="center">
         <v-col cols="12" sm="12" md="8">
-          <v-card class="pa-3">
+          <v-card class="pa-4">
+            <h2 class="mb-2">
+              Ответственный за:
+            </h2>
             <v-tabs v-model="addEmplTab">
-              <v-tab value="default_user">
-                обычный пользователь
-              </v-tab>
               <v-tab value="territory_resp">
-                ответственный
+                территорию
+              </v-tab>
+              <v-tab value="problem_fix">
+                неисправность
               </v-tab>
             </v-tabs>
             <v-window v-model="addEmplTab" style="max-height: 60vh; overflow-y: scroll; ">
-              <v-window-item value="default_user" class="ma-4">
-                <v-textarea v-model="employeesEmails" label="Введите email сотрудников через запятую" variant="solo"
-                  auto-grow rows="3"></v-textarea>
-              </v-window-item>
               <v-window-item value="territory_resp" class="ma-4">
-                <div v-for="(empl, index) of newEmpls" cols="5">
+                <div v-for="(empl, index) of NEW_EMPLS" cols="5">
                   <v-row type="flex">
                     <v-col cols="12" class="pb-0 pt-0">
                       {{ index + 1 }}
                     </v-col>
                     <v-col cols="12" xl="4" class="pb-0 pt-0">
                       <v-text-field placeholder="ФИО" variant="solo" density="compact"
-                        v-model="newEmpls[index].emplName">
+                        v-model="NEW_EMPLS[index].emplName">
                       </v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" xl="4" class="pb-0 pt-0">
                       <v-text-field placeholder="Ответственный за" variant="solo" density="compact"
-                        v-model="newEmpls[index].place">
+                        v-model="NEW_EMPLS[index].places">
                       </v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" xl="4" class="pt-0 pb-0">
                       <v-text-field placeholder="Email" variant="solo" density="compact"
-                        v-model="newEmpls[index].email">
+                        v-model="NEW_EMPLS[index].email">
                       </v-text-field>
                     </v-col>
                   </v-row>
                 </div>
                 <v-btn size="small"
-                  @click="newEmpls.push({ places: '', emplName: '', email: '', roles: ['territory_resp'], isConfirmed: false })">
+                  @click="NEW_EMPLS.push({ places: '', emplName: '', email: '', roles: ['territory_resp'], isConfirmed: false })">
+                  + ещё
+                </v-btn>
+              </v-window-item>
+              <v-window-item value="problem_fix" class="ma-4">
+                <div v-for="(empl, index) of NEW_EMPLS" cols="5">
+                  <v-row type="flex">
+                    <v-col cols="12" class="pb-0 pt-0">
+                      {{ index + 1 }}
+                    </v-col>
+                    <v-col cols="12" xl="4" class="pb-0 pt-0">
+                      <v-text-field placeholder="ФИО" variant="solo" density="compact"
+                        v-model="NEW_EMPLS[index].emplName">
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" xl="4" class="pb-0 pt-0">
+                      <v-text-field label="Ответственный за" placeholder="введите через запятую" variant="solo"
+                        density="compact" v-model="NEW_EMPLS[index].problemType">
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" xl="4" class="pt-0 pb-0">
+                      <v-text-field placeholder="Email" variant="solo" density="compact"
+                        v-model="NEW_EMPLS[index].email">
+                      </v-text-field>
+                    </v-col>
+                  </v-row>
+                </div>
+                <v-btn size="small"
+                  @click="NEW_EMPLS.push({ places: '', emplName: '', email: '', roles: ['territory_resp'], isConfirmed: false })">
                   + ещё
                 </v-btn>
               </v-window-item>
@@ -329,6 +356,6 @@ onMounted(() => {
           </v-card>
         </v-col>
       </v-row>
-    </v-dialog>
+    </v-dialog> -->
   </v-row>
 </template>
