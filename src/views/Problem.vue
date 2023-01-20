@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { useCompany } from '../stores/company'
 
-const FACTORY = computed(() => {
+const FACTORY_PLACES = computed(() => {
   if (!companyStore.company) return []
   return companyStore.fetchedPlaces
 })
@@ -11,7 +11,7 @@ const companyStore = useCompany()
 let photo = ref()
 let photos = ref([])
 let commentToPhoto = ref('')
-let place = ref()
+let placeId = ref()
 
 function addFile(file) {
   if (file.length) {
@@ -28,22 +28,30 @@ function addFile(file) {
 }
 
 async function submit() {
-  let toSend = {
-    photos: [],
-    commentToPhoto: commentToPhoto.value,
-    place: {},
-    dateStart: Date.now(),
-  }
-
-  // find place and empl object
-  for (let p of FACTORY.value) {
-    if (p.place == place.value) {
-      toSend.place = p
+  if (placeId.value) {
+    let fullPlace;
+    for (let pl of companyStore.fetchedPlaces) {
+      if (pl._id == placeId.value) {
+        fullPlace = pl
+      }
     }
+
+    let toSend = {
+      photos: [],
+      commentToPhoto: commentToPhoto.value,
+      placeId: placeId.value,
+      actions: [{
+        status: 'created',
+        respEmpl: fullPlace.empl,
+        date: Date.now()
+      }]
+    }
+
+    await companyStore.reportProblem(toSend)
+
+    commentToPhoto.value = ''
+    placeId.value = null
   }
-  await companyStore.reportProblem(toSend)
-  commentToPhoto.value = ''
-  place.value = null
 }
 </script>
 <template>
@@ -67,8 +75,8 @@ async function submit() {
     </v-col>
     <v-col cols="12">
       Где это произошло?
-      <v-autocomplete v-model="place" hide-no-data variant="solo" placeholder="Выберите" :items="FACTORY"
-        item-title="place" item-value="place" clearable></v-autocomplete>
+      <v-autocomplete v-model="placeId" hide-no-data variant="solo" placeholder="Выберите" :items="FACTORY_PLACES"
+        item-title="place" item-value="_id" clearable></v-autocomplete>
     </v-col>
     <v-col cols="12" class="d-flex justify-center">
       <v-btn @click="submit">Отправить</v-btn>
