@@ -10,23 +10,23 @@ const router = useRouter()
 
 let reportsToFix = computed(() => {
   if (companyStore.employee) {
-    return companyStore.employee.reportsToFix.reverse()
+    return companyStore.fetchedReports.reverse()
   }
   return []
 })
 
-let sentToFix = computed(() => {
-  if (companyStore.employee) {
-    let res = []
-    for (let r of companyStore.employee.reportsToFix) {
-      if (r.sentToFix) {
-        res.push(r)
-      }
-    }
-    return res
-  }
-  return []
-})
+// let sentToFix = computed(() => {
+//   if (companyStore.employee) {
+//     let res = []
+//     for (let r of companyStore.fetchedReports) {
+//       if (r.sentToFix) {
+//         res.push(r)
+//       }
+//     }
+//     return res
+//   }
+//   return []
+// })
 
 function logout() {
   userStore.logout()
@@ -47,12 +47,12 @@ function logout() {
           <v-hover v-slot="{ isHovering, props }">
             <v-card style="cursor: pointer;" v-bind="props" :elevation="isHovering ? 4 : 0" class="pa-2"
               @click="router.push(`/problem-page?_id=${report._id}`)">
-              <div>{{ report.place.place }}</div>
+              <div>{{ report.place }}</div>
               <div class="text-grey-darken-2">
                 {{ report.commentToPhoto }}
               </div>
-              <b v-if="((Date.now() - report.dateStart) / 1000 / 60 / 60).toFixed(0) < 24" class="text-success">
-                осталось: {{(24 - (Date.now() - report.dateStart) / 1000 / 60 / 60).toFixed(0)}} ч.
+              <b v-if="((Date.now() - report.actions[0].date) / 1000 / 60 / 60).toFixed(0) < 24" class="text-success">
+                осталось: {{(24 - (Date.now() - report.actions[0].date) / 1000 / 60 / 60).toFixed(0) }} ч.
               </b>
               <div v-else class="text-error">
                 Просроченная задача
@@ -65,9 +65,9 @@ function logout() {
 
     <v-col cols=" 12">
       <h2>Отправлено на исправление</h2>
-      <span v-if="!sentToFix.length">
+      <!-- <span v-if="!sentToFix.length">
         Пусто
-      </span>
+      </span> -->
     </v-col>
   </v-row>
 </template>

@@ -8,6 +8,7 @@ export const useCompany = defineStore('company', {
         employee: null,
         fetchedEmployees: null,
         fetchedPlaces: null,
+        fetchedReports: null
     }),
     getters: {
     },
@@ -52,6 +53,7 @@ export const useCompany = defineStore('company', {
             this.company = data
             await this.fecthEmpls()
             await this.fetchPlaces()
+            await this.fetchReports()
         },
         async fecthEmpls() {
             if (!this.company) return
@@ -71,6 +73,11 @@ export const useCompany = defineStore('company', {
         async fetchPlaces() {
             const { data } = await CompanyService.getPlaces(this.company.identifier, this.company.places)
             this.fetchedPlaces = data
+            return data
+        },
+        async fetchReports() {
+            const { data } = await CompanyService.getReports(this.employee.reportsToFix)
+            this.fetchedReports = data
             return data
         }
     }
