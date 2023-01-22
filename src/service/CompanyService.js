@@ -4,6 +4,12 @@ export default {
     sendProblemToFix(data) {
         return $api.post("/company/send-to-fix", data);
     },
+    getProblemTypes(company_id) {
+        return $api.get(`/company/get-problem-types?company_id=${company_id}`)
+    },
+    getFullProblem(_id) {
+        return $api.get(`/company/get-full-problem?_id=${_id}`)
+    },
     getReports(reportsIds) {
         return $api.post('/company/get-reports?', reportsIds);
     },
