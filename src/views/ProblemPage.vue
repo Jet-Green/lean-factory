@@ -25,6 +25,9 @@ function sendToFix() {
   })
   problemType.value = null
 }
+function fixProblem() {
+  companyStore.fixProblem(currentProblem.value._id)
+}
 
 onMounted(async () => {
   let { data } = await companyStore.getFullProblem(curPrId)
@@ -52,11 +55,14 @@ onMounted(async () => {
             <br /> {{ currentProblem.commentToPhoto }}
           </div>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" v-if="currentProblem.actions[currentProblem.actions.length - 1].status == 'created'">
           Выбрать тип проблемы
           <v-autocomplete v-model="problemType" hide-no-data variant="solo" placeholder="Выберите" :items="problemTypes"
             item-title="type" item-value="empl" clearable></v-autocomplete>
           <v-btn @click="sendToFix">отправить на выполнение</v-btn>
+        </v-col>
+        <v-col cols="12" v-if="currentProblem.actions[currentProblem.actions.length - 1].status == 'sent_to_fix'">
+          <v-btn @click="fixProblem" color="success">Выполнить</v-btn>
         </v-col>
       </v-row>
     </v-col>
