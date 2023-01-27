@@ -11,9 +11,10 @@ let email = ref()
 let password = ref()
 let fullname = ref()
 
-function registration() {
+async function registration() {
   let company_id = router.currentRoute.value.query.company_id
-  let result = userStore.registration({ fullname: fullname.value, email: email.value, password: password.value, company: company_id ? company_id : "-1" })
+  userStore.isAuth = true
+  let result = await userStore.registration({ fullname: fullname.value, email: email.value, password: password.value, company: company_id ? company_id : "-1" })
 
   if (result.success) {
     valid.value = true
