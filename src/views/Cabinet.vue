@@ -28,8 +28,8 @@ let reportsToFix = computed(() => {
 //   return []
 // })
 
-function logout() {
-  userStore.logout()
+async function logout() {
+  await userStore.logout()
   router.push('/')
 }
 </script>

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import UserService from '../service/UserService'
 import axios from 'axios'
+import { useCompany } from './company'
 
 export const useAuth = defineStore('auth', {
     state: () => ({
@@ -86,6 +87,8 @@ export const useAuth = defineStore('auth', {
 
                 this.isAuth = false;
                 this.user = null
+                let companyStore = useCompany()
+                companyStore.clearState()
             } catch (err) {
                 console.log(err);
             }

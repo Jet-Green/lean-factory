@@ -95,7 +95,7 @@ router.beforeResolve(async function (to, from, next) {
     const companyStore = useCompany()
     const userStore = useAuth()
 
-    if (userStore.user.company > '-1') {
+    if (userStore.user?.company > '-1') {
         await companyStore.getCompany(userStore.user.company)
         next()
     } else {

@@ -92,6 +92,14 @@ export const useCompany = defineStore('company', {
             const { data } = await CompanyService.getProblemTypes(this.company.identifier)
             this.fetchedProblemTypes = data
 
+        },
+        clearState() {
+            this.company = null
+            this.employee = null
+            this.fetchedEmployees = null
+            this.fetchedPlaces = null
+            this.fetchedReports = null
+            this.fetchedProblemTypes = null
         }
     }
 })
