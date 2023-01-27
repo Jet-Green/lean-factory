@@ -51,11 +51,28 @@ async function logout() {
               <div class="text-grey-darken-2">
                 {{ report.commentToPhoto }}
               </div>
-              <b v-if="((Date.now() - report.actions[0].date) / 1000 / 60 / 60).toFixed(0) < 24" class="text-success">
-                осталось: {{(24 - (Date.now() - report.actions[0].date) / 1000 / 60 / 60).toFixed(0) }} ч.
-              </b>
-              <div v-else class="text-error">
-                Просроченная задача
+              <div v-if="report.actions[report.actions.length - 1].status == 'created'">
+                <b v-if="((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24"
+                  class="text-success">
+                  осталось: {{(24 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
+                  60).toFixed(0) }} ч.
+                </b>
+                <div v-else class="text-error">
+                  Просроченная задача
+                </div>
+              </div>
+              <div v-if="report.actions[report.actions.length - 1].status == 'sent_to_fix'">
+                <b v-if="((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24"
+                  class="text-success">
+                  осталось: {{(24 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
+                  60).toFixed(0) }} ч.
+                </b>
+                <div v-else class="text-error">
+                  Просроченная задача
+                </div>
+              </div>
+              <div v-if="report.actions[report.actions.length - 1].status == 'fixed'">
+                <b class="text-success">Задача выполнена</b>
               </div>
             </v-card>
           </v-hover>
