@@ -54,7 +54,7 @@ async function logout() {
               <div v-if="report.actions[report.actions.length - 1].status == 'created'">
                 <b v-if="((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24"
                   class="text-success">
-                  осталось: {{(72 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
+                  осталось: {{(24 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
                   60).toFixed(0) }} ч.
                 </b>
                 <div v-else class="text-error">
@@ -65,7 +65,7 @@ async function logout() {
                 <b v-if="((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24"
                   class="text-success">
                   <span>
-                    осталось: {{(24 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
+                    осталось: {{(72 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
                     60).toFixed(0) }} ч.
                   </span>
                 </b>
