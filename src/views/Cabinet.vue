@@ -124,10 +124,16 @@ async function logout() {
                 {{ report.commentToPhoto }}
               </div>
               <b class="text-success">Задача выполнена</b>
-              <span props:date="new Date(report.actions[report.actions.length -
-              1].date)">
-                {{ date }}
-              </span>
+              {{
+                new Date(report.actions[report.actions.length - 1].date)
+                  .toLocaleDateString('ru-RU')
+              }}
+              {{
+                ' ' + new Date(report.actions[report.actions.length - 1].date).toLocaleTimeString('ru-RU', {
+                  hour:
+                    "2-digit", minute: "2-digit"
+                })
+              }}
               <!-- {{
               .getDate() + '.' + new Date(report.actions[report.actions.length -
   1].date).getMonth() + '.' + new Date(report.actions[report.actions.length - 1].date).getFullYear() + ' ' +

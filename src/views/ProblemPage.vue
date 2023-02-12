@@ -54,7 +54,10 @@ onMounted(async () => {
           </div>
           <div style="overflow-wrap: break-word;">
             Комментарий к фото:
-            <br /> {{ currentProblem.commentToPhoto }}
+            <br />
+            <b>
+              {{ currentProblem.commentToPhoto }}
+            </b>
           </div>
         </v-col>
         <v-col cols="12"
@@ -69,7 +72,30 @@ onMounted(async () => {
           <v-text-field variant=" solo" label="Комментарий" v-model="commentToFixedProblem"></v-text-field>
           <v-btn @click="fixProblem" color="success">Выполнить</v-btn>
         </v-col>
+        <v-col cols="12" v-if="currentProblem.actions[currentProblem.actions.length - 1].status = 'fixed'">
+          <b>
+            Задача выполнена
+            {{
+              new Date(currentProblem.actions[currentProblem.actions.length - 1].date)
+                .toLocaleDateString('ru-RU')
+            }}
+            {{
+              ' ' + new Date(currentProblem.actions[currentProblem.actions.length - 1].date).toLocaleTimeString('ru-RU', {
+                hour:
+                  "2-digit", minute: "2-digit"
+              })
+            }}
+          </b>
+          <div>
+            {{ currentProblem.actions[currentProblem.actions.length - 1].comment }}
+          </div>
+        </v-col>
       </v-row>
     </v-col>
   </v-row>
 </template>
+<style scoped>
+b {
+  font-size: 20px;
+}
+</style>
