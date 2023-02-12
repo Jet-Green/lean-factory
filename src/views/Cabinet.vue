@@ -8,25 +8,29 @@ const userStore = useAuth()
 const companyStore = useCompany()
 const router = useRouter()
 
-let reportsToFix = computed(() => {
+let newReports = computed(() => {
+  let result = []
   if (companyStore.employee) {
-    return companyStore.fetchedReports.reverse()
+    result = companyStore.fetchedReports.filter((report) => report.actions[report.actions.length - 1].status == 'created')
   }
-  return []
+  return result
 })
 
-// let sentToFix = computed(() => {
-//   if (companyStore.employee) {
-//     let res = []
-//     for (let r of companyStore.fetchedReports) {
-//       if (r.sentToFix) {
-//         res.push(r)
-//       }
-//     }
-//     return res
-//   }
-//   return []
-// })
+let sentToFix = computed(() => {
+  let result = []
+  if (companyStore.employee) {
+    result = companyStore.fetchedReports.filter((report) => report.actions[report.actions.length - 1].status == 'sent_to_fix')
+  }
+  return result
+})
+
+let fixed = computed(() => {
+  let result = []
+  if (companyStore.employee) {
+    result = companyStore.fetchedReports.filter((report) => report.actions[report.actions.length - 1].status == 'fixed')
+  }
+  return result
+})
 
 async function logout() {
   await userStore.logout()
@@ -38,12 +42,12 @@ async function logout() {
     <v-col cols="12">
       <span @click="logout" class="mdi mdi-24px mdi-logout" style="cursor: pointer; float: right">
       </span>
-      <h2>Нужно исправить</h2>
-      <div v-if="!reportsToFix.length">
+      <h2>Новые</h2>
+      <div v-if="!newReports.length">
         Пусто
       </div>
-      <v-row type="flex">
-        <v-col v-for="report of reportsToFix" cols="6">
+      <v-row v-else type="flex">
+        <v-col v-for="report of newReports" cols="6">
           <v-hover v-slot="{ isHovering, props }">
             <v-card style="cursor: pointer;" v-bind="props" :elevation="isHovering ? 4 : 0" class="pa-2"
               @click="router.push(`/problem-page?_id=${report._id}`)">
@@ -51,30 +55,13 @@ async function logout() {
               <div class="text-grey-darken-2">
                 {{ report.commentToPhoto }}
               </div>
-              <div v-if="report.actions[report.actions.length - 1].status == 'created'">
-                <b v-if="((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24"
-                  class="text-success">
-                  осталось: {{(24 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
-                  60).toFixed(0) }} ч.
-                </b>
-                <div v-else class="text-error">
-                  Просроченная задача
-                </div>
-              </div>
-              <div v-if="report.actions[report.actions.length - 1].status == 'sent_to_fix'">
-                <b v-if="((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24"
-                  class="text-success">
-                  <span>
-                    осталось: {{(72 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
-                    60).toFixed(0) }} ч.
-                  </span>
-                </b>
-                <div v-else class="text-error">
-                  Просроченная задача
-                </div>
-              </div>
-              <div v-if="report.actions[report.actions.length - 1].status == 'fixed'">
-                <b class="text-success">Задача выполнена</b>
+              <b v-if="((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24"
+                class="text-success">
+                осталось: {{(24 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
+                60).toFixed(0) }} ч.
+              </b>
+              <div v-else class="text-error">
+                Просроченная задача
               </div>
             </v-card>
           </v-hover>
@@ -82,11 +69,55 @@ async function logout() {
       </v-row>
     </v-col>
 
-    <v-col cols=" 12">
+    <v-col cols="12">
       <h2>Отправлено на исправление</h2>
-      <!-- <span v-if="!sentToFix.length">
+      <span v-if="!sentToFix.length">
         Пусто
-      </span> -->
+      </span>
+      <v-row v-else type="flex">
+        <v-col v-for="report of sentToFix" cols="6">
+          <v-hover v-slot="{ isHovering, props }">
+            <v-card style="cursor: pointer;" v-bind="props" :elevation="isHovering ? 4 : 0" class="pa-2"
+              @click="router.push(`/problem-page?_id=${report._id}`)">
+              <div>{{ report.place }}</div>
+              <div class="text-grey-darken-2">
+                {{ report.commentToPhoto }}
+              </div>
+              <b v-if="((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24"
+                class="text-success">
+                <span>
+                  осталось: {{(72 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
+                  60).toFixed(0) }} ч.
+                </span>
+              </b>
+              <div v-else class="text-error">
+                Просроченная задача
+              </div>
+            </v-card>
+          </v-hover>
+        </v-col>
+      </v-row>
+    </v-col>
+
+    <v-col cols="12">
+      <h2>Выполнено</h2>
+      <span v-if="!fixed.length">
+        Пусто
+      </span>
+      <v-row v-else type="flex">
+        <v-col v-for="report of fixed" cols="6">
+          <v-hover v-slot="{ isHovering, props }">
+            <v-card style="cursor: pointer;" v-bind="props" :elevation="isHovering ? 4 : 0" class="pa-2"
+              @click="router.push(`/problem-page?_id=${report._id}`)">
+              <div>{{ report.place }}</div>
+              <div class="text-grey-darken-2">
+                {{ report.commentToPhoto }}
+              </div>
+              <b class="text-success">Задача выполнена</b>
+            </v-card>
+          </v-hover>
+        </v-col>
+      </v-row>
     </v-col>
   </v-row>
 </template>

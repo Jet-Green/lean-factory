@@ -57,14 +57,16 @@ onMounted(async () => {
             <br /> {{ currentProblem.commentToPhoto }}
           </div>
         </v-col>
-        <v-col cols="12" v-if="currentProblem.actions[currentProblem.actions.length - 1].status == 'created'">
+        <v-col cols="12"
+          v-if="currentProblem.actions[currentProblem.actions.length - 1].status == 'created' && companyStore.employee.hierarchy.up.length">
           Выбрать тип проблемы
           <v-autocomplete v-model="problemType" hide-no-data variant="solo" placeholder="Выберите" :items="problemTypes"
             item-title="type" item-value="empl" clearable></v-autocomplete>
           <v-btn @click="sendToFix">отправить на выполнение</v-btn>
         </v-col>
-        <v-col cols="12" v-if="currentProblem.actions[currentProblem.actions.length - 1].status == 'sent_to_fix'">
-          <v-text-field variant="solo" label="Комментарий" v-model="commentToFixedProblem"></v-text-field>
+        <v-col cols="12"
+          v-if="currentProblem.actions[currentProblem.actions.length - 1].status == 'sent_to_fix' && companyStore.employee.hierarchy.up.length">
+          <v-text-field variant=" solo" label="Комментарий" v-model="commentToFixedProblem"></v-text-field>
           <v-btn @click="fixProblem" color="success">Выполнить</v-btn>
         </v-col>
       </v-row>
