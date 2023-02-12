@@ -37,6 +37,10 @@ async function deleteReport(_id) {
   let { data } = await companyStore.deleteReport(_id)
 }
 
+function downloadStats() {
+  companyStore.downloadStats()
+}
+
 async function logout() {
   await userStore.logout()
   router.push('/login')
@@ -49,7 +53,9 @@ async function logout() {
         выход
       </span>
     </v-col>
-
+    <v-col cols="12">
+      <v-btn @click="downloadStats">скачать статистку в формате excel</v-btn>
+    </v-col>
     <v-col cols="12">
       <h2>Новые</h2>
       <span v-if="!newReports.length">

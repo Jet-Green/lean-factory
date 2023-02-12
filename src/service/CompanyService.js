@@ -1,6 +1,9 @@
 import $api from "../plugins/axios";
 
 export default {
+    getReportsToExcel(empls_ids) {
+        return $api.post('/company/get-reports-to-excel', empls_ids)
+    },
     deleteReport(_id, emplid) {
         return $api.get(`/company/delete-problem?problem_id=${_id}&empl_id=${emplid}`)
     },

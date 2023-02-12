@@ -2,6 +2,9 @@ import { defineStore } from 'pinia'
 import CompanyService from '../service/CompanyService'
 import { useAuth } from './auth'
 
+import xlsx from "json-as-xlsx"
+
+
 export const useCompany = defineStore('company', {
     state: () => ({
         company: null,
@@ -14,6 +17,52 @@ export const useCompany = defineStore('company', {
     getters: {
     },
     actions: {
+        async downloadStats() {
+            let emplIdsWithMyReports = [this.employee._id, ...this.employee.hierarchy.down]
+
+            let { data } = await CompanyService.getReportsToExcel(emplIdsWithMyReports)
+            console.log(data);
+
+            let statsData = []
+            for (let d of data) {
+                for (let act of d.actions) {
+                    let toPush = {
+                        comment: d.commentToPhoto,
+                        placeName: d.placeName,
+                        respEmplName: d.respEmplName,
+                        date: new Date(act.date).toLocaleDateString('ru-RU') + ' ' + new Date(act.date).toLocaleTimeString('ru-RU'),
+                        status: ''
+                    }
+                    if (act.status == 'created') {
+                        toPush.status = 'создана'
+                    } else if (act.status == 'sent_to_fix') {
+                        toPush.status = 'отправлено исполнителю'
+                    } else {
+                        toPush.status = 'завершена'
+                    }
+
+                    statsData.push(toPush)
+                }
+                statsData.push({})
+            }
+
+            // console.log(statsData);
+            xlsx([
+                {
+                    sheet: "Проблемы",
+                    columns: [
+                        { label: "Комментарий", value: "comment" }, // Top level data
+                        { label: "Место", value: 'placeName' },
+                        { label: "Ответственный", value: 'respEmplName' },
+                        { label: "Дата", value: 'date' },
+                        { label: "Статус", value: 'status' }
+                    ],
+                    content: statsData,
+                }
+            ], {
+                fileName: "Глазов-Молоко",
+            })
+        },
         async deleteReport(_id) {
             let res = await CompanyService.deleteReport(_id, this.employee._id)
             console.log(res);
