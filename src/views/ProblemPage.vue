@@ -77,7 +77,7 @@ onMounted(async () => {
             Задача выполнена
             {{
               new Date(currentProblem.actions[currentProblem.actions.length - 1].date)
-                .toLocaleDateString('ru-RU')
+                .toLocaleDateString('ru-RU', { month: 'long', day: 'numeric' })
             }}
             {{
               ' ' + new Date(currentProblem.actions[currentProblem.actions.length - 1].date).toLocaleTimeString('ru-RU', {

@@ -126,13 +126,13 @@ async function logout() {
               <b class="text-success">Задача выполнена</b>
               {{
                 new Date(report.actions[report.actions.length - 1].date)
-                  .toLocaleDateString('ru-RU')
+                  .toLocaleDateString('ru-RU', { month: 'long', day: 'numeric' })
               }}
               {{
-                ' ' + new Date(report.actions[report.actions.length - 1].date).toLocaleTimeString('ru-RU', {
-                  hour:
-                    "2-digit", minute: "2-digit"
-                })
+  ' ' + new Date(report.actions[report.actions.length - 1].date).toLocaleTimeString('ru-RU', {
+    hour:
+      "2-digit", minute: "2-digit"
+  })
               }}
               <!-- {{
               .getDate() + '.' + new Date(report.actions[report.actions.length -
