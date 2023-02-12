@@ -14,8 +14,8 @@ export const useCompany = defineStore('company', {
     getters: {
     },
     actions: {
-        async fixProblem(problemId) {
-            return await CompanyService.fixProblem(problemId)
+        async fixProblem(problemId, comment) {
+            return await CompanyService.fixProblem(problemId, comment)
         },
         async sendProblemToFix(data) {
             return await CompanyService.sendProblemToFix(data)

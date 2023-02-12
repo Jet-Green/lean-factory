@@ -25,13 +25,15 @@ function sendToFix() {
   })
   problemType.value = null
 }
-function fixProblem() {
-  companyStore.fixProblem(currentProblem.value._id)
+
+let commentToFixedProblem = ref()
+async function fixProblem() {
+  await companyStore.fixProblem(currentProblem.value._id, commentToFixedProblem.value)
+  commentToFixedProblem.value = ''
 }
 
 onMounted(async () => {
   let { data } = await companyStore.getFullProblem(curPrId)
-  data.photos.push('https://is5-ssl.mzstatic.com/image/thumb/Purple122/v4/54/e1/f0/54e1f0e7-0f84-aa82-e03a-a7f57c28cae4/AppIcon-0-1x_U007emarketing-0-7-0-85-220.png/1200x630wa.png')
   currentProblem.value = data
   console.log(data);
 })
@@ -62,6 +64,7 @@ onMounted(async () => {
           <v-btn @click="sendToFix">отправить на выполнение</v-btn>
         </v-col>
         <v-col cols="12" v-if="currentProblem.actions[currentProblem.actions.length - 1].status == 'sent_to_fix'">
+          <v-text-field variant="solo" label="Комментарий" v-model="commentToFixedProblem"></v-text-field>
           <v-btn @click="fixProblem" color="success">Выполнить</v-btn>
         </v-col>
       </v-row>

@@ -1,8 +1,8 @@
 import $api from "../plugins/axios";
 
 export default {
-    fixProblem(problemId) {
-        return $api.get(`/company/fix-problem?problem_id=${problemId}`)
+    fixProblem(problemId, comment) {
+        return $api.get(`/company/fix-problem?problem_id=${problemId}&comment=${comment}`)
     },
     sendProblemToFix(data) {
         return $api.post("/company/send-to-fix", data);
