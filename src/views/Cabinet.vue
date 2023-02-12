@@ -34,18 +34,22 @@ let fixed = computed(() => {
 
 async function logout() {
   await userStore.logout()
-  router.push('/')
+  router.push('/login')
 }
 </script>
 <template>
   <v-row>
     <v-col cols="12">
-      <span @click="logout" class="mdi mdi-24px mdi-logout" style="cursor: pointer; float: right">
+      <span @click="logout" class="mdi mdi-24px mdi-logout d-flex align-center" style="cursor: pointer; float: right">
+        выход
       </span>
+    </v-col>
+
+    <v-col cols="12">
       <h2>Новые</h2>
-      <div v-if="!newReports.length">
+      <span v-if="!newReports.length">
         Пусто
-      </div>
+      </span>
       <v-row v-else type="flex">
         <v-col v-for="report of newReports" cols="6">
           <v-hover v-slot="{ isHovering, props }">
@@ -55,10 +59,12 @@ async function logout() {
               <div class="text-grey-darken-2">
                 {{ report.commentToPhoto }}
               </div>
-              <b v-if="((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24"
-                class="text-success">
-                осталось: {{(24 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
-                60).toFixed(0) }} ч.
+              <!-- ((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24 -->
+              <b v-if="(Date.now() - report.actions[report.actions.length - 1].date) < 60000" class="text-success">
+                <!-- осталось: {{(24 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
+                60).toFixed(0) }} ч. -->
+
+                осталось: {{(60 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000).toFixed(0) }} c.
               </b>
               <div v-else class="text-error">
                 Просроченная задача
@@ -83,11 +89,15 @@ async function logout() {
               <div class="text-grey-darken-2">
                 {{ report.commentToPhoto }}
               </div>
-              <b v-if="((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24"
+              <!-- ((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24 -->
+              <b v-if="(Date.now() - report.actions.find((a) => a.status == 'sent_to_fix').date) < 60000"
                 class="text-success">
                 <span>
-                  осталось: {{(72 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
-                  60).toFixed(0) }} ч.
+                  <!-- осталось: {{(72 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
+                  60).toFixed(0) }} ч. -->
+                  осталось: {{(60 - (Date.now() - report.actions.find((a) => a.status == 'sent_to_fix').date) /
+                  1000).toFixed(0) }}
+                  c.
                 </span>
               </b>
               <div v-else class="text-error">

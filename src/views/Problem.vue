@@ -38,13 +38,18 @@ async function submit() {
       }
     }
 
-    let imagesFormData = new FormData()
+    let photosFromDB = []
 
-    for (let photo of filesToDB) {
-      imagesFormData.append('files', photo)
+    if (filesToDB.length) {
+      let imagesFormData = new FormData()
+
+      for (let photo of filesToDB) {
+        imagesFormData.append('files', photo)
+      }
+
+      let { data } = await axios.post('http://localhost:3040/company/upload-problem-photos', imagesFormData, { headers: { 'Content-Type': 'multipart/form-data' } })
+      photosFromDB = data
     }
-
-    let { data: photosFromDB } = await axios.post('http://localhost:3040/company/upload-problem-photos', imagesFormData, { headers: { 'Content-Type': 'multipart/form-data' } })
 
     let toSend = {
       photos: photosFromDB,
