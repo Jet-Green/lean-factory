@@ -14,6 +14,15 @@ export const useCompany = defineStore('company', {
     getters: {
     },
     actions: {
+        async deleteReport(_id) {
+            let res = await CompanyService.deleteReport(_id, this.employee._id)
+            console.log(res);
+
+            this.fetchedReports.splice(this.fetchedReports.indexOf(res.data[0]), 1)
+            this.employee = res.data[1]
+
+            return res.data[0] != undefined
+        },
         async fixProblem(problemId, comment) {
             return await CompanyService.fixProblem(problemId, comment)
         },
@@ -91,7 +100,6 @@ export const useCompany = defineStore('company', {
         async fetchProblemTypes() {
             const { data } = await CompanyService.getProblemTypes(this.company.identifier)
             this.fetchedProblemTypes = data
-
         },
         clearState() {
             this.company = null

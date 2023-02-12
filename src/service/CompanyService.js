@@ -1,6 +1,9 @@
 import $api from "../plugins/axios";
 
 export default {
+    deleteReport(_id, emplid) {
+        return $api.get(`/company/delete-problem?problem_id=${_id}&empl_id=${emplid}`)
+    },
     fixProblem(problemId, comment) {
         return $api.get(`/company/fix-problem?problem_id=${problemId}&comment=${comment}`)
     },
