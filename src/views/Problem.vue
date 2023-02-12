@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useCompany } from '../stores/company'
+import axios from 'axios'
 
 const FACTORY_PLACES = computed(() => {
   if (!companyStore.company) return []
@@ -9,20 +10,21 @@ const FACTORY_PLACES = computed(() => {
 
 const companyStore = useCompany()
 let photo = ref()
-let photos = ref([])
+let filesToDB = []
+let photosToShow = ref([])
 let commentToPhoto = ref('')
 let placeId = ref()
 
 function addFile(file) {
-  if (file.length) {
-    file = file[0]
-    console.log(file);
+  filesToDB.push(file[0])
+  file = file[0]
+  if (file) {
     photo.value = []
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.addEventListener("load", () => {
       // convert image file to base64 string
-      photos.value.push({ name: file.name, img: reader.result })
+      photosToShow.value.push({ name: file.name, img: reader.result })
     }, false);
   }
 }
@@ -36,8 +38,16 @@ async function submit() {
       }
     }
 
+    let imagesFormData = new FormData()
+
+    for (let photo of filesToDB) {
+      imagesFormData.append('files', photo)
+    }
+
+    let { data: photosFromDB } = await axios.post('http://localhost:3040/company/upload-problem-photos', imagesFormData, { headers: { 'Content-Type': 'multipart/form-data' } })
+
     let toSend = {
-      photos: [],
+      photos: photosFromDB,
       commentToPhoto: commentToPhoto.value,
       placeId: placeId.value,
       actions: [{
@@ -66,7 +76,7 @@ async function submit() {
       <v-textarea v-model="commentToPhoto" variant="solo" rows="2" counter="500" auto-grow
         label="Комментарий к проблеме"></v-textarea>
 
-      <v-card v-for="file of photos" class="mb-2 pa-2">
+      <v-card v-for="file of photosToShow" class="mb-2 pa-2">
         <div style="overflow-y: scroll; max-height: 50px">
           {{ file.name }}
         </div>
