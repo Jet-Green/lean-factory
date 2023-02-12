@@ -124,6 +124,15 @@ async function logout() {
                 {{ report.commentToPhoto }}
               </div>
               <b class="text-success">Задача выполнена</b>
+              <span props:date="new Date(report.actions[report.actions.length -
+              1].date)">
+                {{ date }}
+              </span>
+              <!-- {{
+              .getDate() + '.' + new Date(report.actions[report.actions.length -
+  1].date).getMonth() + '.' + new Date(report.actions[report.actions.length - 1].date).getFullYear() + ' ' +
+    new Date(report.actions[report.actions.length - 1].date).getHours() + ' часов'
+              }} -->
             </v-card>
           </v-hover>
         </v-col>
