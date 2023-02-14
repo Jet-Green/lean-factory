@@ -53,6 +53,13 @@ async function logout() {
         выход
       </span>
     </v-col>
+    <v-col cols="12" v-if="companyStore.employee">
+      <h2>
+        <span class="mdi mdi-account-outline">
+        </span>
+        {{ companyStore.employee?.emplName }}
+      </h2>
+    </v-col>
     <v-col cols="12">
       <v-btn @click="downloadStats">скачать статистку в формате excel</v-btn>
     </v-col>

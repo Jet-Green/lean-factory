@@ -42,8 +42,8 @@ onMounted(async () => {
             <v-list density="compact" nav @click:select="move">
                 <v-list-item color="red" prepend-icon="mdi-camera" title="Нарушение" value="Problem"
                     v-if="companyStore.company"></v-list-item>
-                <v-list-item color="info" prepend-icon="mdi-help-circle-outline" title="Инструкция"
-                    value="Instruction"></v-list-item>
+                <!-- <v-list-item color="info" prepend-icon="mdi-help-circle-outline" title="Инструкция"
+                    value="Instruction"></v-list-item> -->
                 <v-list-item color="success" prepend-icon="mdi-account" title="Кабинет" value="Cabinet"></v-list-item>
                 <v-list-item v-if="isAdmin" color="success" prepend-icon="mdi-pen" title="Админ"
                     value="Admin"></v-list-item>
@@ -62,12 +62,12 @@ onMounted(async () => {
                     Нарушение
                 </span>
             </v-btn>
-            <v-btn value="Instruction">
+            <!-- <v-btn value="Instruction">
                 <v-icon color="info">mdi-help-circle-outline</v-icon>
                 <span>
                     Инструкция
                 </span>
-            </v-btn>
+            </v-btn> -->
             <v-btn value="Cabinet">
                 <v-icon color="success">mdi-account</v-icon>
                 <span>

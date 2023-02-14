@@ -9,12 +9,12 @@ const router = useRouter()
 let valid = ref(true)
 let email = ref()
 let password = ref()
-let fullname = ref()
+// let fullname = ref()
 
 async function registration() {
   let company_id = router.currentRoute.value.query.company_id
   userStore.isAuth = true
-  let result = await userStore.registration({ fullname: fullname.value, email: email.value, password: password.value, company: company_id ? company_id : "-1" })
+  let result = await userStore.registration({ fullname: 'default', email: email.value, password: password.value, company: company_id ? company_id : "-1" })
 
   if (result.success) {
     valid.value = true
@@ -32,9 +32,9 @@ async function registration() {
               <v-col cols="12" class="pa-0">
                 <h1 class="text-center mb-8">Регистрация</h1>
               </v-col>
-              <v-col cols="12" class="pa-0">
+              <!-- <v-col cols="12" class="pa-0">
                 <v-text-field v-model="fullname" label="ФИО" variant="solo" autocomplete="name" required></v-text-field>
-              </v-col>
+              </v-col> -->
               <v-col cols="12" class="pa-0">
                 <v-text-field v-model="email" label="Электронная почта" variant="solo" autocomplete="email"
                   required></v-text-field>
