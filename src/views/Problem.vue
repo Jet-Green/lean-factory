@@ -78,15 +78,14 @@ async function submit() {
       <v-file-input v-model="photo" label="Фото" variant="solo" prepend-icon="" prepend-inner-icon="mdi-camera"
         accept="image/*" @update:modelValue="addFile">
       </v-file-input>
-      <v-textarea v-model="commentToPhoto" variant="solo" rows="2" counter="500" auto-grow
-        label="Комментарий к проблеме"></v-textarea>
-
       <v-card v-for="file of photosToShow" class="mb-2 pa-2">
         <div style="overflow-y: scroll; max-height: 50px">
           {{ file.name }}
         </div>
         <img :src="file.img" alt="" style="max-width: 100px">
       </v-card>
+      <v-textarea v-model="commentToPhoto" variant="solo" rows="2" counter="500" auto-grow
+        label="Комментарий к проблеме"></v-textarea>
     </v-col>
     <v-col cols="12">
       Где это произошло?
