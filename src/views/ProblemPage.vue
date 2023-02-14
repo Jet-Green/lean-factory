@@ -34,8 +34,8 @@ async function fixProblem() {
 
 onMounted(async () => {
   let { data } = await companyStore.getFullProblem(curPrId)
-  currentProblem.value = data
   console.log(data);
+  currentProblem.value = data
 })
 </script>
 <template>
@@ -72,7 +72,7 @@ onMounted(async () => {
           <v-text-field variant=" solo" label="Комментарий" v-model="commentToFixedProblem"></v-text-field>
           <v-btn @click="fixProblem" color="success">Выполнить</v-btn>
         </v-col>
-        <v-col cols="12" v-if="currentProblem.actions[currentProblem.actions.length - 1].status = 'fixed'">
+        <v-col cols="12" v-if="currentProblem.actions[currentProblem.actions.length - 1].status == 'fixed'">
           <b>
             Задача выполнена
             {{

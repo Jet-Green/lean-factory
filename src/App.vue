@@ -40,8 +40,7 @@ onMounted(async () => {
         <!-- </v-app-bar> -->
         <v-navigation-drawer expand-on-hover rail class="d-none d-md-flex">
             <v-list density="compact" nav @click:select="move">
-                <v-list-item color="red" prepend-icon="mdi-camera" title="Нарушение" value="Problem"
-                    v-if="companyStore.company"></v-list-item>
+                <v-list-item color="red" prepend-icon="mdi-camera" title="Нарушение" value="Problem"></v-list-item>
                 <!-- <v-list-item color="info" prepend-icon="mdi-help-circle-outline" title="Инструкция"
                     value="Instruction"></v-list-item> -->
                 <v-list-item color="success" prepend-icon="mdi-account" title="Кабинет" value="Cabinet"></v-list-item>
@@ -56,7 +55,7 @@ onMounted(async () => {
             </v-container>
         </v-main>
         <v-bottom-navigation class="d-flex d-md-none" mode="shift" @update:modelValue="move">
-            <v-btn value="Problem" v-if="companyStore.company">
+            <v-btn value="Problem">
                 <v-icon color=" red">mdi-camera</v-icon>
                 <span>
                     Нарушение
