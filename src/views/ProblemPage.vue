@@ -92,7 +92,7 @@ onMounted(async () => {
         </v-col>
       </v-row>
     </v-col>
-  </v-row>
+</v-row>
 </template>
 <style scoped>
 b {
