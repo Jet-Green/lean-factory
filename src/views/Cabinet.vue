@@ -95,7 +95,7 @@ async function logout() {
                           <!-- ((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24 -->
                           <b class="text-success">
                             <!-- осталось: {{(24 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
-                                                                                                                                                                                                                                  60).toFixed(0) }} ч. -->
+                                                                                                                                                                                                                                          60).toFixed(0) }} ч. -->
                             осталось: {{ (60 - (Date.now() - report.actions[report.actions.length - 1].date) /
                               1000).toFixed(0)
                             }} c.
@@ -103,7 +103,19 @@ async function logout() {
                         </v-col>
                         <v-col v-else>
                           <div class="text-error">
-                            Просроченная задача
+                            просрочена {{
+                              new Date(report.actions[report.actions.length -
+                                1].date).toLocaleDateString('ru-RU', {
+                                  month: 'long', day: 'numeric'
+                                })
+                            }}
+                            {{
+                              new Date(report.actions[report.actions.length -
+                                1].date).toLocaleTimeString('ru-RU', {
+                                  hour:
+                                    "2-digit", minute: "2-digit"
+                                })
+                            }}
                           </div>
                         </v-col>
                         <v-col class="d-flex justify-end">
@@ -170,14 +182,24 @@ async function logout() {
                         class="text-success">
                         <span>
                           <!-- осталось: {{(72 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
-                                                                                                                                                                                                                                60).toFixed(0) }} ч. -->
+                                                                                                                                                                                                                                        60).toFixed(0) }} ч. -->
                           осталось: {{ (60 - (Date.now() - report.actions.find((a) => a.status == 'sent_to_fix').date) /
                             1000).toFixed(0) }}
                           c.
                         </span>
                       </b>
                       <div v-else class="text-error">
-                        Просроченная задача
+                        просрочена
+                        {{
+                          new Date(report.actions[report.actions.length - 1].date)
+                            .toLocaleDateString('ru-RU', { month: 'long', day: 'numeric' })
+                        }}
+                        {{
+                          ' ' + new Date(report.actions[report.actions.length - 1].date).toLocaleTimeString('ru-RU', {
+                            hour:
+                              "2-digit", minute: "2-digit"
+                          })
+                        }}
                       </div>
                     </v-card>
                   </v-hover>
@@ -222,7 +244,7 @@ async function logout() {
 
 
 
-</v-row>
+  </v-row>
 </template>
 <style lang="scss" scoped>
 .reports-window {
