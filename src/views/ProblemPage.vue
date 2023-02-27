@@ -60,8 +60,7 @@ onMounted(async () => {
             </b>
           </div>
         </v-col>
-        <v-col cols="12"
-          v-if="currentProblem.actions[currentProblem.actions.length - 1].status == 'created' && companyStore.employee.hierarchy.up.length">
+        <v-col cols="12" v-if="currentProblem.actions[currentProblem.actions.length - 1].status == 'created'">
           Выбрать тип проблемы
           <v-autocomplete v-model="problemType" hide-no-data variant="solo" placeholder="Выберите" :items="problemTypes"
             item-title="type" item-value="empl" clearable></v-autocomplete>
@@ -92,7 +91,7 @@ onMounted(async () => {
         </v-col>
       </v-row>
     </v-col>
-</v-row>
+  </v-row>
 </template>
 <style scoped>
 b {
