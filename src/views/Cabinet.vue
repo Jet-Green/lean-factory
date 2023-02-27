@@ -95,7 +95,7 @@ async function logout() {
                           <!-- ((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24 -->
                           <b class="text-success">
                             <!-- осталось: {{(24 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
-                                                                                                                                                                                                                                          60).toFixed(0) }} ч. -->
+                                                                                                                                                                                                                                                60).toFixed(0) }} ч. -->
                             осталось: {{ (60 - (Date.now() - report.actions[report.actions.length - 1].date) /
                               1000).toFixed(0)
                             }} c.
@@ -169,7 +169,7 @@ async function logout() {
                 Пусто
               </span>
               <v-row v-else type="flex">
-                <v-col v-for="report of sentToFix" cols="12" sm="6" md="4">
+                <v-col v-for="report of sentToFix" cols="12">
                   <v-hover v-slot="{ isHovering, props }">
                     <v-card style="cursor: pointer;" v-bind="props" :elevation="isHovering ? 4 : 0" class="pa-2"
                       @click="router.push(`/problem-page?_id=${report._id}`)">
@@ -182,7 +182,7 @@ async function logout() {
                         class="text-success">
                         <span>
                           <!-- осталось: {{(72 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
-                                                                                                                                                                                                                                        60).toFixed(0) }} ч. -->
+                                                                                                                                                                                                                                              60).toFixed(0) }} ч. -->
                           осталось: {{ (60 - (Date.now() - report.actions.find((a) => a.status == 'sent_to_fix').date) /
                             1000).toFixed(0) }}
                           c.
@@ -212,7 +212,7 @@ async function logout() {
                 Пусто
               </span>
               <v-row v-else type="flex">
-                <v-col v-for="report of   fixed" cols="12" sm="6" md="4">
+                <v-col v-for="report of fixed" cols="12" sm="6" md="4">
                   <v-hover v-slot="{ isHovering, props }">
                     <v-card style="cursor: pointer;" v-bind="props" :elevation="isHovering ? 4 : 0" class="pa-2"
                       @click="router.push(`/problem-page?_id=${report._id}`)">
