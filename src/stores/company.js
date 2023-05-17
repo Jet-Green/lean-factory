@@ -137,6 +137,8 @@ export const useCompany = defineStore('company', {
             }
         },
         async fetchPlaces() {
+            if (!this.company) return
+
             const { data } = await CompanyService.getPlaces(this.company.identifier, this.company.places)
             this.fetchedPlaces = data
             return data
