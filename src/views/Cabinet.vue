@@ -91,12 +91,12 @@ async function logout() {
                             {{ report.commentToPhoto }}
                           </div>
                         </v-col>
-                        <v-col v-if="(Date.now() - report.actions[report.actions.length - 1].date) < 60000">
+                        <v-col v-if="(Date.now() - report.actions[report.actions.length - 1].date) < 20 * 60000">
                           <!-- ((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24 -->
                           <b class="text-success">
                             <!-- осталось: {{(24 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
                                                                                                                                                                                                                                                             60).toFixed(0) }} ч. -->
-                            осталось: {{ (60 - (Date.now() - report.actions[report.actions.length - 1].date) /
+                            осталось: {{ (20 * 60 - (Date.now() - report.actions[report.actions.length - 1].date) /
                               1000).toFixed(0)
                             }} c.
                           </b>
@@ -178,12 +178,14 @@ async function logout() {
                         {{ report.commentToPhoto }}
                       </div>
                       <!-- ((Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 / 60).toFixed(0) < 24 -->
-                      <b v-if="(Date.now() - report.actions.find((a) => a.status == 'sent_to_fix').date) < 60000"
+                      <b v-if="(Date.now() - report.actions.find((a) => a.status == 'sent_to_fix').date) < 20 * 60000"
                         class="text-success">
                         <span>
                           <!-- осталось: {{(72 - (Date.now() - report.actions[report.actions.length - 1].date) / 1000 / 60 /
                                                                                                                                                                                                                                                           60).toFixed(0) }} ч. -->
-                          осталось: {{ (60 - (Date.now() - report.actions.find((a) => a.status == 'sent_to_fix').date) /
+                          осталось: {{ (20 * 60 - (Date.now() - report.actions.find((a) => a.status ==
+                            'sent_to_fix').date)
+                            /
                             1000).toFixed(0) }}
                           c.
                         </span>
