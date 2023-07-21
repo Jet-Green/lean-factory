@@ -21,11 +21,11 @@ function move(route) {
 }
 
 onMounted(async () => {
-    if (userStore.isAuth)
-        await userStore.checkAuth()
+    // if (userStore.isAuth)
+    await userStore.checkAuth()
 
-    if (userStore.user.company)
-        await companyStore.getCompany(userStore.user.company)
+    // if (userStore.user.company)
+    await companyStore.getCompany(userStore.user.company || "0")
 })
 </script>
 
@@ -85,6 +85,4 @@ onMounted(async () => {
     </v-layout>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

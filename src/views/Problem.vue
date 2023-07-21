@@ -47,7 +47,7 @@ async function submit() {
         imagesFormData.append('files', photo)
       }
 
-      let { data } = await axios.post('http://51.250.120.102:3040/company/upload-problem-photos', imagesFormData, { headers: { 'Content-Type': 'multipart/form-data' } })
+      let { data } = await axios.post('http://localhost:3040/company/upload-problem-photos', imagesFormData, { headers: { 'Content-Type': 'multipart/form-data' } })
       photosFromDB = data
     }
 

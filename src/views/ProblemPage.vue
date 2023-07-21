@@ -26,7 +26,7 @@ function sendToFix() {
   problemType.value = null
 }
 
-let commentToFixedProblem = ref()
+let commentToFixedProblem = ref('')
 async function fixProblem() {
   await companyStore.fixProblem(currentProblem.value._id, commentToFixedProblem.value)
   commentToFixedProblem.value = ''
@@ -68,7 +68,7 @@ onMounted(async () => {
         </v-col>
         <v-col cols="12"
           v-if="currentProblem.actions[currentProblem.actions.length - 1].status == 'sent_to_fix' && companyStore.employee.hierarchy.up.length">
-          <v-text-field variant=" solo" label="Комментарий" v-model="commentToFixedProblem"></v-text-field>
+          <v-text-field variant="solo" label="Комментарий" v-model="commentToFixedProblem"></v-text-field>
           <v-btn @click="fixProblem" color="success">Выполнить</v-btn>
         </v-col>
         <v-col cols="12" v-if="currentProblem.actions[currentProblem.actions.length - 1].status == 'fixed'">
@@ -86,7 +86,8 @@ onMounted(async () => {
             }}
           </b>
           <div>
-            {{ currentProblem.actions[currentProblem.actions.length - 1].comment }}
+            {{ currentProblem.actions[currentProblem.actions.length - 1].comment != 'undefined' ?
+              currentProblem.actions[currentProblem.actions.length - 1].comment : "" }}
           </div>
         </v-col>
       </v-row>

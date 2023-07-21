@@ -6,6 +6,10 @@ import { useCompany } from '../stores/company'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
+    beforeEach: async () => {
+        const userStore = useAuth()
+        await userStore.checkAuth()
+    },
     routes: [
         {
             path: '/',
